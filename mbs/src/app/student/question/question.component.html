@@ -1,7 +1,9 @@
+<p>{{ question }}</p>
 <div
   ace-editor
   [(text)]="text"
-  [theme]="'eclipse'"
+  [theme]="'dracula'"
+  [mode]="'java'"
   [options]="options"
   [readOnly]="false"
   [autoUpdateContent]="true"
@@ -9,3 +11,4 @@
   (textChanged)="onChange($event)"
   style="min-height: 200px; width:100%; overflow: auto;"
 ></div>
+<button (onClick)="onSubmit()">Submit</button>

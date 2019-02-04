@@ -1,4 +1,6 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input, ViewChild } from "@angular/core";
+import "brace/theme/dracula";
+import "brace/mode/java";
 
 @Component({
   selector: "app-question",
@@ -6,14 +8,23 @@ import { Component, OnInit, Input } from "@angular/core";
   styleUrls: ["./question.component.css"]
 })
 export class QuestionComponent implements OnInit {
+  question: string;
   text: string;
   options: any = { maxLines: 1000, printMargin: false };
+  private snapshot: string[];
 
-  constructor() {}
+  constructor() {
+    this.question =
+      "Q1. Write a function that remove only even elements from integer array";
+  }
 
   ngOnInit() {}
 
   onChange(code) {
-    console.log(`new code`, code);
+    this.snapshot.push(code);
+  }
+
+  onSubmit() {
+    console.log(this.snapshot);
   }
 }
