@@ -1,12 +1,12 @@
-import { Component, ViewEncapsulation } from "@angular/core";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { Observable } from "rxjs";
+import { Component, ViewEncapsulation } from "@angular/core"
+import { HttpClient, HttpHeaders } from "@angular/common/http"
+import { Observable } from "rxjs"
 import {
   FormGroup,
   FormControl,
   FormBuilder,
   Validators
-} from "@angular/forms";
+} from "@angular/forms"
 
 @Component({
   selector: "app-login",
@@ -54,13 +54,12 @@ export class AdminLogin {
   }
 
   onSubmit() {
-    console.log(this.loginForm);
     const form = {
       uname: this.loginForm.controls.uname.value,
       password: this.loginForm.controls.password.value
     };
 
-    this.http.post("http://home:8080/login/", form).subscribe((data: any) => {
+    this.http.post("http://home:8080/login/", form).subscribe((data:any) => {
       if (data.success) localStorage["token"] = data.token;
     });
   }
