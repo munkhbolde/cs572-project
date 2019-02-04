@@ -1,6 +1,4 @@
 import { Component, OnInit, Input, ViewChild } from "@angular/core";
-import "brace/theme/dracula";
-import "brace/mode/java";
 
 @Component({
   selector: "app-question",
