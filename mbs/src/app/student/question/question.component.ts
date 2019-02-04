@@ -1,23 +1,29 @@
 import { Component, OnInit, Input, ViewChild } from "@angular/core";
-import "ace-builds/webpack-resolver";
+import { AuthService } from "../../services/auth.service";
 
+import "ace-builds/webpack-resolver";
 @Component({
   selector: "app-question",
   templateUrl: "./question.component.html",
   styleUrls: ["./question.component.css"]
 })
 export class QuestionComponent implements OnInit {
+  @ViewChild("editor") editor;
+  number: number;
   question: string;
   text: string;
+
   options: any = { maxLines: 1000, printMargin: false };
   private snapshot: string[] = [];
 
-  constructor() {
+  constructor(private auth: AuthService) {
     this.question =
-      "Q1. Write a function that remove only even elements from integer array";
+      "1. Write a function that remove only even elements from integer array";
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.auth.login();
+  }
 
   onChange(code: string) {
     this.snapshot.push(code);
