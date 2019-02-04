@@ -50,7 +50,10 @@ export class AdminLogin {
 			"password": this.loginForm.controls.password.value
 		}
 
-		this.http.post('http://home:8080/admin/login/', form)
-		.subscribe(data => console.log(data))
+		this.http.post('http://home:8080/login/', form)
+		.subscribe(data => {
+			if(data.success)
+				localStorage['token'] = data.token
+		})
 	}
 }
