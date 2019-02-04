@@ -1,10 +1,13 @@
 const express = require('express')
 const parser = require('body-parser')
+const cors = require('cors')
 const path = require('path')
 const app = express()
 
+
 //:1 middle wares
 app.use(parser.json())
+app.use(cors())
 app.use(express.static(__dirname + '/templates/static/css/'))
 // endfold
 
