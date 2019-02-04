@@ -78,6 +78,13 @@ app.post('/admin/create/staff', check_token, async (req, res) => {
   res.json({success: true})
 })
 
+//:1 create question
+app.post('/admin/create/question', check_token, async (req, res) => {
+  const q = req.body.question
+  req.db.collection('exam').update({}, {$addToSet: {question: q}})
+  res.json({success: true})
+})
+
 //:1 error
 app.use(function(error, req, res, next) {
   res.json({ message: error.message });
