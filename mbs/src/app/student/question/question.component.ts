@@ -1,5 +1,7 @@
 import { Component, OnInit, Input, ViewChild } from "@angular/core";
 import "ace-builds/webpack-resolver";
+import { StudentService } from "src/app/services/student.service";
+import { Server } from "selenium-webdriver/safari";
 
 @Component({
   selector: "app-question",
@@ -12,7 +14,7 @@ export class QuestionComponent implements OnInit {
   options: any = { maxLines: 1000, printMargin: false };
   private snapshot: string[];
 
-  constructor() {
+  constructor(private service: StudentService) {
     this.question =
       "Q1. Write a function that remove only even elements from integer array";
   }
