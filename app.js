@@ -3,7 +3,7 @@ const parser = require('body-parser')
 const path = require('path')
 const app = express()
 
-//:1 middle wares
+//:1 middlewares
 app.use(parser.json())
 app.use(express.static(__dirname + '/templates/static/css/'))
 // endfold
