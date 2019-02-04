@@ -8,28 +8,28 @@ const path = require('path')
 const config = require('./dotenv')
 
 //:1 helper
-const bcrypt = require('bcrypt');
-hashme = function(password) {
-  const salt = bcrypt.genSaltSync(10)
-  return bcrypt.hashSync(password, salt)
-}
+const bcrypt = require("bcrypt");
+hashme = function (password) {
+  const salt = bcrypt.genSaltSync(10);
+  return bcrypt.hashSync(password, salt);
+};
 
-compare = function(plain, hash) {
+compare = function (plain, hash) {
   return bcrypt.compareSync(plain, hash)
 }
 
 let db
 app = express()
 
-const client = mongo(config.dbConnection, {useNewUrlParser: true})
+const client = mongo(config.dbConnection, { useNewUrlParser: true })
 client.connect()
-setTimeout(() => { db = client.db('mbs_cs572')}, 1000)
+setTimeout(() => { db = client.db('mbs_cs572') }, 1000)
 
 
 //:1 middlewares
-app.use(parser.json())
-app.use(cors())
-app.use(express.static(__dirname + '/templates/static/css/'))
+app.use(parser.json());
+app.use(cors());
+app.use(express.static(__dirname + "/templates/static/css/"));
 app.use((req, res, next) => {
   req.db = db
   next()
@@ -41,7 +41,7 @@ check_token = function (req, res, next) {
   }
 
   const token = req.headers.authorization.split(' ')[1]
-  jwt.verify(token, 'secret', function(err, decoded) {
+  jwt.verify(token, 'secret', function (err, decoded) {
     if (decoded.type !== 'admin')
       res.render('403', { status: 403, url: req.url });
   })
@@ -52,9 +52,9 @@ check_token = function (req, res, next) {
 app.post('/login/', async (req, res) => {
   let user = undefined
   await req.db.collection('user')
-  .find({name: req.body.uname}).forEach(data => {
-    if (compare(req.body.password, data.password)) user = data
-  })
+    .find({ name: req.body.uname }).forEach(data => {
+      if (compare(req.body.password, data.password)) user = data
+    })
 
   if (user) {
     const token = jwt.sign({
@@ -62,10 +62,10 @@ app.post('/login/', async (req, res) => {
       type: user.type
     }, 'secret', { expiresIn: '1h' })
     res.header('Authorizatin', `Bearer ${token}`)
-    res.json({success: true, token: token})
+    res.json({ success: true, token: token })
     return
   }
-  res.json({success: false})
+  res.json({ success: false })
 })
 
 //:1 create staff
@@ -73,9 +73,9 @@ app.post('/admin/create/staff', check_token, async (req, res) => {
   const name = req.body.name
   const password = hashme(req.body.password)
   if (name === '')
-    res.json({success: false})
-  req.db.collection('user').insertOne({name: name, password: password, type: 'staff'})
-  res.json({success: true})
+    res.json({ success: false })
+  req.db.collection('user').insertOne({ name: name, password: password, type: 'staff' })
+  res.json({ success: true })
 })
 
 //:1 create question
@@ -86,7 +86,7 @@ app.post('/admin/create/question', check_token, async (req, res) => {
 })
 
 //:1 error
-app.use(function(error, req, res, next) {
+app.use(function (error, req, res, next) {
   res.json({ message: error.message });
 })
 // endfold
