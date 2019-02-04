@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, ViewChild } from "@angular/core";
+import "ace-builds/webpack-resolver";
 
 @Component({
   selector: "app-question",
@@ -18,9 +19,7 @@ export class QuestionComponent implements OnInit {
 
   ngOnInit() {}
 
-  onChange(code) {
-    this.snapshot.push(code);
-  }
+  onChange(code) {}
 
   onSubmit() {
     console.log(this.snapshot);
