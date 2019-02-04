@@ -19,7 +19,7 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
             "assets": ["src/favicon.ico", "src/assets"],
-            "styles": ["src/styles.css"],
+            "styles": ["src/bulma.css", "src/styles.css"],
             "scripts": ["node_modules/ace-builds/src-min/ace.js"]
           },
           "configurations": {

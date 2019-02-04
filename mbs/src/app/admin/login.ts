@@ -40,7 +40,6 @@ import {
       </div>
     </form>
   `,
-  styleUrls: ["../style.css", "../bulma.css"]
 })
 export class AdminLogin {
   title = "login";
@@ -60,6 +59,7 @@ export class AdminLogin {
     };
 
     this.http.post("http://home:8080/login/", form).subscribe((data:any) => {
+			localStorage.clear()
       if (data.success) localStorage["token"] = data.token;
     });
   }

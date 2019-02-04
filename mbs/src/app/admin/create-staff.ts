@@ -10,7 +10,6 @@ import {
 @Component({
 	selector: 'create-staff',
 	encapsulation: ViewEncapsulation.None,
-  styleUrls: ["../style.css", "../bulma.css"],
 	template: `
 		<form [formGroup]="staffForm" (ngSubmit)="onSubmit()">
 			<div class="field">
@@ -40,6 +39,7 @@ import {
 })
 export class StaffCreate {
 	title = 'Create staff'
+	url = 'http://home:8080/admin/create/staff'
 	staffForm: FormGroup
 
 	constructor(private formBuilder: FormBuilder, private http: HttpClient) {
@@ -50,6 +50,13 @@ export class StaffCreate {
 	}
 
 	onSubmit() {
-		console.log(this.staffForm)
+		const form = {
+			name: this.staffForm.controls.name.value,
+			password: this.staffForm.controls.password.value
+		}
+
+		this.http.post(this.url, form).subscribe((data:any) => {
+			console.log(data)
+		})
 	}
 }
