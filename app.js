@@ -1,77 +1,87 @@
 //:1 imports
-const express = require("express");
-const parser = require("body-parser");
-const mongo = require("mongodb").MongoClient;
-const jwt = require("jsonwebtoken");
-const cors = require("cors");
-const path = require("path");
-const fs = require("fs");
-const promisify = require("util").promisify;
-const readFile = promisify(fs.readFile);
+const express = require('express')
+const parser = require('body-parser')
+const mongo = require('mongodb').MongoClient
+const jwt = require('jsonwebtoken')
+const cors = require('cors')
+const path = require('path')
+const config = require('./dotenv')
 
 //:1 helper
 const bcrypt = require("bcrypt");
-hashme = function(password) {
+hashme = function (password) {
   const salt = bcrypt.genSaltSync(10);
   return bcrypt.hashSync(password, salt);
 };
 
-compare = function(plain, hash) {
-  return bcrypt.compareSync(plain, hash);
-};
-// endfold
-let db;
-app = express();
-
-async function dbConnection() {
-  let config = await readFile("dotenv.json");
-  config = JSON.parse(config);
-  const client = mongo(
-    "mongodb://admin:q1;w2;e3;@ds121105.mlab.com:21105/mbs_cs572",
-    { useNewUrlParser: true }
-  );
-  client.connect();
-  setTimeout(() => {
-    db = client.db("mbs_cs572");
-  }, 1000);
+compare = function (plain, hash) {
+  return bcrypt.compareSync(plain, hash)
 }
-dbConnection();
+
+let db
+app = express()
+
+const client = mongo(config.dbConnection, { useNewUrlParser: true })
+client.connect()
+setTimeout(() => { db = client.db('mbs_cs572') }, 1000)
+
 
 //:1 middlewares
 app.use(parser.json());
 app.use(cors());
 app.use(express.static(__dirname + "/templates/static/css/"));
 app.use((req, res, next) => {
-  req.db = db;
-  next();
-  db.collection("user").updateOne(
-    {},
-    { $set: { name: "asaad", password: hashme("saad"), type: "admin" } }
-  );
-});
+  req.db = db
+  next()
+})
+
+check_token = function (req, res, next) {
+  if (!req.headers.authorization) {
+    res.render('403', { status: 403, url: req.url });
+  }
+
+  const token = req.headers.authorization.split(' ')[1]
+  jwt.verify(token, 'secret', function (err, decoded) {
+    if (decoded.type !== 'admin')
+      res.render('403', { status: 403, url: req.url });
+  })
+  next()
+}
+
+//:1 login
+app.post('/login/', async (req, res) => {
+  let user = undefined
+  await req.db.collection('user')
+    .find({ name: req.body.uname }).forEach(data => {
+      if (compare(req.body.password, data.password)) user = data
+    })
+
+  if (user) {
+    const token = jwt.sign({
+      name: user.name,
+      type: user.type
+    }, 'secret', { expiresIn: '1h' })
+    res.header('Authorizatin', `Bearer ${token}`)
+    res.json({ success: true, token: token })
+    return
+  }
+  res.json({ success: false })
+})
+
+//:1 create staff
+app.post('/admin/create/staff', check_token, async (req, res) => {
+  const name = req.body.name
+  const password = hashme(req.body.password)
+  if (name === '')
+    res.json({ success: false })
+  req.db.collection('user').insertOne({ name: name, password: password, type: 'staff' })
+  res.json({ success: true })
+})
+
+//:1 error
+app.use(function (error, req, res, next) {
+  res.json({ message: error.message });
+})
 // endfold
 
-app.post("/login/", async (req, res) => {
-  let user = undefined;
-  await req.db
-    .collection("user")
-    .find({ name: req.body.uname })
-    .forEach(data => {
-      if (compare(req.body.password, data.password)) user = data;
-    });
-  if (user) {
-    const token = jwt.sign(
-      {
-        name: user.name,
-        type: user.type
-      },
-      "secret",
-      { expiresIn: "1h" }
-    );
-    res.header("Authorizatin", `Bearer ${token}`);
-    res.json({ success: true, token: token });
-    return;
-  }
-  res.json({ success: false });
-});
-app.listen(8080, () => console.log("listening on 8080"));
+app.listen(8080, () => console.log('listening on 8080'))
