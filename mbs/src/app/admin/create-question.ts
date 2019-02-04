@@ -36,7 +36,6 @@ export class CreateQuestion {
 	}
 
 	onSubmit() {
-		console.log(this.questionForm.controls.question.value)
 		const data = {
 			question: this.questionForm.controls.question.value
 		}
