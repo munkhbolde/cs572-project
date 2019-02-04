@@ -60,7 +60,7 @@ export class AdminLogin {
       password: this.loginForm.controls.password.value
     };
 
-    this.http.post("http://home:8080/login/", form).subscribe(data => {
+    this.http.post("http://home:8080/login/", form).subscribe((data: any) => {
       if (data.success) localStorage["token"] = data.token;
     });
   }
