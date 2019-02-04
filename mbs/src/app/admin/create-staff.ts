@@ -1,5 +1,5 @@
 import { Component, ViewEncapsulation } from '@angular/core'
-import { HttpClient, HttpHeaders } from '@angular/common/http'
+import { HttpClient } from '@angular/common/http'
 import {
 	FormGroup,
 	FormControl,
@@ -37,15 +37,15 @@ import {
 		</form>
 	`,
 })
-export class StaffCreate {
+export class CreateStaff {
 	title = 'Create staff'
 	url = 'http://home:8080/admin/create/staff'
 	staffForm: FormGroup
 
 	constructor(private formBuilder: FormBuilder, private http: HttpClient) {
 		this.staffForm = formBuilder.group({
-			name: ["", Validators.required],
-			password: ["", Validators.required],
+			name: ['', Validators.required],
+			password: ['', Validators.required],
 		})
 	}
 

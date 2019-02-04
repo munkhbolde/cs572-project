@@ -8,7 +8,8 @@ import { QuestionComponent } from './student/question/question.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http'
 import { AdminLogin } from './admin/login'
-import { StaffCreate } from './admin/create-staff'
+import { CreateStaff } from './admin/create-staff'
+import { CreateQuestion } from './admin/create-question'
 import { AceEditorModule } from "ng2-ace-editor";
 import { Interceptor } from './services/interceptor'
 
@@ -17,7 +18,8 @@ import { Interceptor } from './services/interceptor'
 		AppComponent,
 		QuestionComponent,
 		AdminLogin,
-		StaffCreate
+		CreateStaff,
+		CreateQuestion,
 	],
 	imports: [
 		BrowserModule,
