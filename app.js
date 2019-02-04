@@ -6,30 +6,29 @@ const jwt = require('jsonwebtoken')
 const cors = require('cors')
 const path = require('path')
 const config = require('./dotenv')
+// endfold
+
+let db
+const client = mongo(config.dbConnection, { useNewUrlParser: true })
+app = express()
+client.connect()
+setTimeout(() => { db = client.db('mbs_cs572') }, 1000)
 
 //:1 helper
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcrypt")
 hashme = function (password) {
-  const salt = bcrypt.genSaltSync(10);
-  return bcrypt.hashSync(password, salt);
-};
+  const salt = bcrypt.genSaltSync(10)
+  return bcrypt.hashSync(password, salt)
+}
 
 compare = function (plain, hash) {
   return bcrypt.compareSync(plain, hash)
 }
 
-let db
-app = express()
-
-const client = mongo(config.dbConnection, { useNewUrlParser: true })
-client.connect()
-setTimeout(() => { db = client.db('mbs_cs572') }, 1000)
-
-
 //:1 middlewares
-app.use(parser.json());
-app.use(cors());
-app.use(express.static(__dirname + "/templates/static/css/"));
+app.use(parser.json())
+app.use(cors())
+app.use(express.static(__dirname + "/templates/static/css/"))
 app.use((req, res, next) => {
   req.db = db
   next()
@@ -37,13 +36,13 @@ app.use((req, res, next) => {
 
 check_token = function (req, res, next) {
   if (!req.headers.authorization) {
-    res.render('403', { status: 403, url: req.url });
+    res.render('403', { status: 403, url: req.url })
   }
 
   const token = req.headers.authorization.split(' ')[1]
   jwt.verify(token, 'secret', function (err, decoded) {
     if (decoded.type !== 'admin')
-      res.render('403', { status: 403, url: req.url });
+      res.render('403', { status: 403, url: req.url })
   })
   next()
 }
@@ -97,7 +96,7 @@ app.get('/admin/questions/', check_token, async (req, res) => {
 
 //:1 error
 app.use(function (error, req, res, next) {
-  res.json({ message: error.message });
+  res.json({ message: error.message })
 })
 // endfold
 

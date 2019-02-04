@@ -39,7 +39,7 @@ import {
 })
 export class CreateStaff {
 	title = 'Create staff'
-	url = 'http://home:8080/admin/create/staff'
+	url = 'http://localhost:8080/admin/create/staff'
 	staffForm: FormGroup
 
 	constructor(private formBuilder: FormBuilder, private http: HttpClient) {
