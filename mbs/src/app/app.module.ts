@@ -7,13 +7,15 @@ import { QuestionComponent } from './student/question/question.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule} from '@angular/common/http'
 import { AdminLogin } from './admin/login'
+import { StaffCreate } from './admin/create-staff'
 import { AceEditorModule } from "ng2-ace-editor";
 
 @NgModule({
 	declarations: [
 		AppComponent,
 		QuestionComponent,
-		AdminLogin
+		AdminLogin,
+		StaffCreate
 	],
 	imports: [
 		BrowserModule,
