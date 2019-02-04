@@ -26,7 +26,7 @@ client.connect()
 setTimeout(() => { db = client.db('mbs_cs572')}, 1000)
 
 
-//:1 middle wares
+//:1 middlewares
 app.use(parser.json())
 app.use(cors())
 app.use(express.static(__dirname + '/templates/static/css/'))
