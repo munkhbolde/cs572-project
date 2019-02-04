@@ -1,0 +1,14 @@
+<p>{{ question }}</p>
+<div
+  ace-editor
+  [(text)]="text"
+  [theme]="'dracula'"
+  [mode]="'java'"
+  [options]="options"
+  [readOnly]="false"
+  [autoUpdateContent]="true"
+  [durationBeforeCallback]="1000"
+  (textChanged)="onChange($event)"
+  style="min-height: 200px; width:100%; overflow: auto;"
+></div>
+<button (click)="submitAnswer()">Submit</button>
