@@ -1,10 +1,9 @@
-import { Component } from "@angular/core";
+import { Component } from '@angular/core';
 
 @Component({
-  selector: "app-root",
-  templateUrl: "./index.html",
-  styleUrls: ["./style.css", "bulma.css"]
+  selector: 'app-root',
+  templateUrl: './index.html',
 })
 export class AppComponent {
-  title = "mbs";
+  title = 'mbs'
 }

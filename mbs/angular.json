@@ -19,8 +19,11 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
             "assets": ["src/favicon.ico", "src/assets"],
-            "styles": ["src/styles.css"],
-            "scripts": ["node_modules/ace-builds/src-min/ace.js"]
+            "styles": ["src/bulma.css", "src/styles.css"],
+            "scripts": [
+              "node_modules/ace-builds/src-min/ace.js",
+              "node_modules/auth0-js/build/auth0.js"
+            ]
           },
           "configurations": {
             "production": {

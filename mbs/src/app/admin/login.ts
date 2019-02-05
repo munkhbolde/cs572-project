@@ -1,66 +1,61 @@
-import { Component, ViewEncapsulation } from "@angular/core"
-import { HttpClient, HttpHeaders } from "@angular/common/http"
-import { Observable } from "rxjs"
+import { Component, ViewEncapsulation } from '@angular/core'
+import { HttpClient, HttpHeaders } from '@angular/common/http'
+import { Observable } from 'rxjs'
 import {
   FormGroup,
   FormControl,
   FormBuilder,
   Validators
-} from "@angular/forms"
+} from '@angular/forms'
 
 @Component({
-  selector: "app-login",
+  selector: 'app-login',
   encapsulation: ViewEncapsulation.None,
   template: `
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
       <div class="field">
-        <div class="control">
-          <input
-            class="input is-primary"
-            type="text"
-            formControlName="uname"
-            placeholder="User name"
-          />
-        </div>
+				<input
+					class="input is-primary"
+					type="text"
+					formControlName="uname"
+					placeholder="User name"
+				/>
       </div>
       <div class="field">
-        <div class="control">
-          <input
-            class="input is-primary"
-            type="password"
-            formControlName="password"
-            placeholder="Password"
-          />
-        </div>
+				<input
+					class="input is-primary"
+					type="password"
+					formControlName="password"
+					placeholder="Password"
+				/>
       </div>
       <div class="field">
-        <div class="control">
-          <input class="button is-primary" type="submit" value="login" />
-        </div>
+				<input class="button is-primary" type="submit" value="login" />
       </div>
     </form>
   `,
-  styleUrls: ["../style.css", "../bulma.css"]
 })
 export class AdminLogin {
-  title = "login";
-  loginForm: FormGroup;
+  title = 'login'
+  loginForm: FormGroup
 
   constructor(private formBuilder: FormBuilder, private http: HttpClient) {
     this.loginForm = formBuilder.group({
-      uname: ["", Validators.required],
-      password: ["", Validators.required]
-    });
+      uname: ['', Validators.required],
+      password: ['', Validators.required]
+    })
   }
 
   onSubmit() {
     const form = {
       uname: this.loginForm.controls.uname.value,
       password: this.loginForm.controls.password.value
-    };
+    }
 
-    this.http.post("http://home:8080/login/", form).subscribe((data:any) => {
-      if (data.success) localStorage["token"] = data.token;
-    });
+    this.http.post('http://localhost:8080/login/', form).subscribe((data:any) => {
+			localStorage.clear()
+			if (data.success)
+				localStorage['token'] = data.token
+    })
   }
 }

@@ -5,6 +5,7 @@ const mongo = require('mongodb').MongoClient
 const jwt = require('jsonwebtoken')
 const cors = require('cors')
 const path = require('path')
+<<<<<<< HEAD
 const fs = require('fs')
 const promisify = require('util').promisify
 const readFile = promisify(fs.readFile);
@@ -12,6 +13,19 @@ const nodemailer = require('nodemailer')
 
 //:1 helper
 const bcrypt = require('bcrypt');
+=======
+const config = require('./dotenv')
+// endfold
+
+let db
+const client = mongo(config.dbConnection, { useNewUrlParser: true })
+app = express()
+client.connect()
+setTimeout(() => { db = client.db('mbs_cs572') }, 1000)
+
+//:1 helper
+const bcrypt = require("bcrypt")
+>>>>>>> 38967a47b25a0dfca3205e1a9ff0fdc25aa3e997
 hashme = function (password) {
   const salt = bcrypt.genSaltSync(10)
   return bcrypt.hashSync(password, salt)
@@ -20,6 +34,7 @@ hashme = function (password) {
 compare = function (plain, hash) {
   return bcrypt.compareSync(plain, hash)
 }
+<<<<<<< HEAD
 // endfold
 let db
 app = express()
@@ -33,24 +48,46 @@ async function dbConnection() {
 }
 dbConnection()
 
+=======
+>>>>>>> 38967a47b25a0dfca3205e1a9ff0fdc25aa3e997
 
 //:1 middlewares
 app.use(parser.json())
 app.use(cors())
-app.use(express.static(__dirname + '/templates/static/css/'))
+app.use(express.static(__dirname + "/templates/static/css/"))
 app.use((req, res, next) => {
   req.db = db
   next()
+<<<<<<< HEAD
   db.collection('user').updateOne({}, { $set: { 'name': 'asaad', password: hashme('saad'), type: 'admin' } })
+=======
+>>>>>>> 38967a47b25a0dfca3205e1a9ff0fdc25aa3e997
 })
-// endfold
 
+check_token = function (req, res, next) {
+  if (!req.headers.authorization) {
+    res.render('403', { status: 403, url: req.url })
+  }
+
+  const token = req.headers.authorization.split(' ')[1]
+  jwt.verify(token, 'secret', function (err, decoded) {
+    if (decoded.type !== 'admin')
+      res.render('403', { status: 403, url: req.url })
+  })
+  next()
+}
+
+//:1 login
 app.post('/login/', async (req, res) => {
   let user = undefined
   await req.db.collection('user')
     .find({ name: req.body.uname }).forEach(data => {
       if (compare(req.body.password, data.password)) user = data
     })
+<<<<<<< HEAD
+=======
+
+>>>>>>> 38967a47b25a0dfca3205e1a9ff0fdc25aa3e997
   if (user) {
     const token = jwt.sign({
       name: user.name,
@@ -61,6 +98,7 @@ app.post('/login/', async (req, res) => {
     return
   }
   res.json({ success: false })
+<<<<<<< HEAD
 })
 // retrieving students information
 app.get('/students', (req, res) => {
@@ -105,5 +143,41 @@ app.post('/invitation', function (req, res) {
 
   });
 });
+=======
+})
+
+//:1 create staff
+app.post('/admin/create/staff', check_token, async (req, res) => {
+  const name = req.body.name
+  const password = hashme(req.body.password)
+  if (name === '')
+    res.json({ success: false })
+  req.db.collection('user').insertOne({ name: name, password: password, type: 'staff' })
+  res.json({ success: true })
+})
+
+//:1 create question
+app.post('/admin/create/question', check_token, async (req, res) => {
+  const q = req.body.question
+  req.db.collection('exam').update({}, {$addToSet: {questions: q}})
+  res.json({success: true})
+})
+
+//:1 question list
+app.get('/admin/questions/', check_token, async (req, res) => {
+    let result = []
+    const pointer = await req.db.collection('exam')
+    .find({}, {'questions': 1, '_id': 0})
+    .forEach((data) => result = data)
+
+    res.json({success:true, data: result.questions})
+})
+
+//:1 error
+app.use(function (error, req, res, next) {
+  res.json({ message: error.message })
+})
+// endfold
+>>>>>>> 38967a47b25a0dfca3205e1a9ff0fdc25aa3e997
 
 app.listen(8080, () => console.log('listening on 8080'))
