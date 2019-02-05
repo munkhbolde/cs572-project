@@ -1,28 +1,49 @@
 import { Component, OnInit, Input, ViewChild } from "@angular/core";
 import "ace-builds/webpack-resolver";
 import { FormGroup, FormBuilder } from '@angular/forms';
+import { edit, Editor } from 'brace';
+import { AceEditorComponent } from 'ng2-ace-editor';
 @Component({
   selector: "app-question",
   templateUrl: "./question.component.html",
   styleUrls: ["./question.component.css"]
 })
 export class QuestionComponent implements OnInit {
-  private exam = {
-    question: "",
+  @ViewChild('editor') editor;
+  @Input() q;
+  @Input() number;
+
+  private exam = [{
+    question: "1. What is an array",
     anwser: "",
+    timeSpent: 0,
     snapshot: []
-  };
-  options: any = { maxLines: 1000, printMargin: false };
+  }, {
+    question: "2. Create a function that delete the last element of array",
+    anwser: "",
+    timeSpent: 0,
+    snapshot: []
+  }, {
+    question: "3. What's my name",
+    anwser: "",
+    timeSpent: 0,
+    snapshot: []
+  }];
+
   private snapshot: string[] = [];
   private code: string = "";
 
-  constructor() {
-
-  }
+  constructor() { }
 
   ngOnInit() {
-
+    console.log(this.editor);
+    if (this.q == null) {
+      this.q = this.exam[0].question;
+      this.number = 1;
+    }
   }
+
+  ngAfterViewInit() { }
 
   onChange(code: string) {
     console.log(code);
@@ -32,7 +53,6 @@ export class QuestionComponent implements OnInit {
 
   submitAnswer() {
     console.log(this.snapshot);
-
     if (localStorage["exam"] != null) {
       //Insert data
       console.log(localStorage["exam"]);
@@ -42,19 +62,10 @@ export class QuestionComponent implements OnInit {
   }
 
   nextQuestion() {
-    if (localStorage.getItem("exam") === null) {
-      this.exam.anwser = this.code;
-      // this.exam.question = this.code // TODO : getQuestion
-      this.exam.snapshot = this.snapshot;
-      localStorage.setItem("exam", JSON.stringify(this.exam));
-    } else {
-      localStorage["exam"].concat(",", JSON.stringify(this.exam));
-    }
 
-    this.exam.anwser = null;
-    this.exam.question = null;
-    this.exam.snapshot = null;
-    this.code = "";
-    this.snapshot = [];
+  }
+
+  prevQuestion() {
+
   }
 }
