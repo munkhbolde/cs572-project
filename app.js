@@ -51,9 +51,9 @@ check_token = function (req, res, next) {
 app.post('/login/', async (req, res) => {
   let user = undefined
   await req.db.collection('user')
-  .find({ name: req.body.uname }).forEach(data => {
-    if (compare(req.body.password, data.password)) user = data
-  })
+    .find({ name: req.body.uname }).forEach(data => {
+      if (compare(req.body.password, data.password)) user = data
+    })
 
   if (user) {
     const token = jwt.sign({
@@ -66,6 +66,7 @@ app.post('/login/', async (req, res) => {
   }
   res.json({ success: false })
 })
+
 //:1 retrieving students information
 app.get('/students', (req, res) => {
   //
@@ -123,18 +124,18 @@ app.post('/admin/create/staff', check_token, async (req, res) => {
 //:1 create question
 app.post('/admin/create/question', check_token, async (req, res) => {
   const q = req.body.question
-  req.db.collection('exam').update({}, {$addToSet: {questions: q}})
-  res.json({success: true})
+  req.db.collection('exam').update({}, { $addToSet: { questions: q } })
+  res.json({ success: true })
 })
 
 //:1 question list
 app.get('/admin/questions/', check_token, async (req, res) => {
-    let result = []
-    const pointer = await req.db.collection('exam')
-    .find({}, {'questions': 1, '_id': 0})
+  let result = []
+  const pointer = await req.db.collection('exam')
+    .find({}, { 'questions': 1, '_id': 0 })
     .forEach((data) => result = data)
 
-    res.json({success:true, data: result.questions})
+  res.json({ success: true, data: result.questions })
 })
 
 //:1 error

@@ -18,6 +18,10 @@ import { CreateStaff } from './admin/create-staff'
 import { CreateQuestion } from './admin/create-question'
 import { QuestionList } from './admin/question-list'
 
+// 
+import { StaffcompComponent } from './staffcomp/staffcomp.component'
+
+
 @NgModule({
 	declarations: [
 		AppComponent,
@@ -26,6 +30,7 @@ import { QuestionList } from './admin/question-list'
 		CreateStaff,
 		CreateQuestion,
 		QuestionList,
+		StaffcompComponent
 	],
 	imports: [
 		BrowserModule,
@@ -34,7 +39,7 @@ import { QuestionList } from './admin/question-list'
 		HttpClientModule,
 		AceEditorModule
 	],
-	providers: [{provide: HTTP_INTERCEPTORS, useClass: Interceptor, multi: true}],
-  bootstrap: [AppComponent]
+	providers: [{ provide: HTTP_INTERCEPTORS, useClass: Interceptor, multi: true }],
+	bootstrap: [AppComponent]
 })
 export class AppModule { }
