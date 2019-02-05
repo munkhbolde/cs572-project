@@ -56,7 +56,7 @@ export class QuestionList implements OnInit {
 		if (!confirm('Do you really want to change status?'))
 			return
 		const data = {question: question, status: status === 'active'? 'disabled': 'active'}
-		console.log(data)
+
 		this.http.post(this.url, data).subscribe((res:any) => {
 			this.loadData()
 		})
