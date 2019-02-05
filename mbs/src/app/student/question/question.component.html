@@ -1,6 +1,6 @@
 <p>{{ number }}.{{ q }}</p>
 <ace-editor [(text)]="text" #editor [theme]="'dracula'" [mode]="'java'" [options]="options" [readOnly]="false"
-  [autoUpdateContent]="true" [durationBeforeCallback]="1000" (textChanged)="onChange($event)" style="min-height: 200px; width:100%; overflow: auto;">
+  [autoUpdateContent]="true" [durationBeforeCallback]="1000" (textChanged)="onChange($event, id)" style="min-height: 200px; width:100%; overflow: auto;">
 </ace-editor>
 <button (click)="prevQuestion()">Previous</button>
 <button (click)="nextQuestion()">Next</button>
