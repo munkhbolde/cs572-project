@@ -17,8 +17,9 @@ import { AdminLogin } from './admin/login'
 import { CreateStaff } from './admin/create-staff'
 import { CreateQuestion } from './admin/create-question'
 import { QuestionList } from './admin/question-list'
+import { StaffList } from './admin/staff-list'
 
-// 
+// Used for staff
 import { StaffcompComponent } from './staffcomp/staffcomp.component'
 
 
@@ -30,7 +31,8 @@ import { StaffcompComponent } from './staffcomp/staffcomp.component'
 		CreateStaff,
 		CreateQuestion,
 		QuestionList,
-		StaffcompComponent
+		StaffcompComponent,
+		StaffList,
 	],
 	imports: [
 		BrowserModule,
