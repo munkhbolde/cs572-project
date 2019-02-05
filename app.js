@@ -111,21 +111,11 @@ app.post('/invitation', function (req, res) {
   });
 });
 
-//:1 create staff
-app.post('/admin/create/staff', check_token, async (req, res) => {
-  const name = req.body.name
-  const password = hashme(req.body.password)
-  if (name === '')
-    res.json({ success: false })
-  req.db.collection('user').insertOne({ name: name, password: password, type: 'staff' })
-  res.json({ success: true })
-})
-
 //:1 create question
 app.post('/admin/create/question', check_token, async (req, res) => {
-  const q = {question :req.body.question, status: 'active'}
+  const q = {question: req.body.question, status: 'active'}
 
-  req.db.collection('exam').update({}, {$addToSet: {questions: q}})
+  req.db.collection('exam').updateOne({}, {$addToSet: {questions: q}})
   res.json({success: true})
 })
 
@@ -133,16 +123,40 @@ app.post('/admin/create/question', check_token, async (req, res) => {
 app.get('/admin/questions/', check_token, async (req, res) => {
   let result = []
   const pointer = await req.db.collection('exam')
-    .find({}).forEach((data) => result = data)
+    .find().forEach((data) => result = data)
 
   res.json({ success: true, data: result.questions })
+})
+
+//:1 edit question status
+app.post('/admin/questions/', check_token, async (req, res) => {
+  const question = req.body.question
+  const status = req.body.status
+  const pointer = await req.db.collection('exam')
+  .updateOne(
+    {'questions': {'$elemMatch': {'question': {'$eq': question}}}},
+    {'$set': {'questions.$.status': status}}
+  )
+
+  res.json({ success: true})
+})
+
+//:1 create staff
+app.post('/admin/create/staff', check_token, async (req, res) => {
+  const name = req.body.name
+  const password = hashme(req.body.password)
+  if (name === '')
+    res.json({ success: false })
+
+  req.db.collection('user').insertOne({ name: name, password: password, type: 'staff' })
+  res.json({ success: true })
 })
 
 //:1 staff list
 app.get('/admin/staffs/', check_token, async (req, res) => {
   let result = []
   const pointer = await req.db.collection('user')
-    .find({}).project({password: 0})
+    .find({type: {$ne: 'admin'}}).project({password: 0})
     .forEach((data) => result.push(data))
 
   res.json({ success: true, data: result})
