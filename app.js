@@ -5,27 +5,17 @@ const mongo = require('mongodb').MongoClient
 const jwt = require('jsonwebtoken')
 const cors = require('cors')
 const path = require('path')
-<<<<<<< HEAD
-const fs = require('fs')
-const promisify = require('util').promisify
-const readFile = promisify(fs.readFile);
 const nodemailer = require('nodemailer')
+const bcrypt = require('bcrypt');
+const config = require('./dotenv')
 
 //:1 helper
-const bcrypt = require('bcrypt');
-=======
-const config = require('./dotenv')
-// endfold
-
 let db
 const client = mongo(config.dbConnection, { useNewUrlParser: true })
 app = express()
 client.connect()
 setTimeout(() => { db = client.db('mbs_cs572') }, 1000)
 
-//:1 helper
-const bcrypt = require("bcrypt")
->>>>>>> 38967a47b25a0dfca3205e1a9ff0fdc25aa3e997
 hashme = function (password) {
   const salt = bcrypt.genSaltSync(10)
   return bcrypt.hashSync(password, salt)
@@ -34,22 +24,6 @@ hashme = function (password) {
 compare = function (plain, hash) {
   return bcrypt.compareSync(plain, hash)
 }
-<<<<<<< HEAD
-// endfold
-let db
-app = express()
-
-async function dbConnection() {
-  let config = await readFile('dotenv.json')
-  config = JSON.parse(config)
-  const client = mongo('mongodb://admin:q1;w2;e3;@ds121105.mlab.com:21105/mbs_cs572', { useNewUrlParser: true })
-  client.connect()
-  setTimeout(() => { db = client.db('mbs_cs572') }, 1000)
-}
-dbConnection()
-
-=======
->>>>>>> 38967a47b25a0dfca3205e1a9ff0fdc25aa3e997
 
 //:1 middlewares
 app.use(parser.json())
@@ -58,10 +32,6 @@ app.use(express.static(__dirname + "/templates/static/css/"))
 app.use((req, res, next) => {
   req.db = db
   next()
-<<<<<<< HEAD
-  db.collection('user').updateOne({}, { $set: { 'name': 'asaad', password: hashme('saad'), type: 'admin' } })
-=======
->>>>>>> 38967a47b25a0dfca3205e1a9ff0fdc25aa3e997
 })
 
 check_token = function (req, res, next) {
@@ -81,13 +51,10 @@ check_token = function (req, res, next) {
 app.post('/login/', async (req, res) => {
   let user = undefined
   await req.db.collection('user')
-    .find({ name: req.body.uname }).forEach(data => {
-      if (compare(req.body.password, data.password)) user = data
-    })
-<<<<<<< HEAD
-=======
+  .find({ name: req.body.uname }).forEach(data => {
+    if (compare(req.body.password, data.password)) user = data
+  })
 
->>>>>>> 38967a47b25a0dfca3205e1a9ff0fdc25aa3e997
   if (user) {
     const token = jwt.sign({
       name: user.name,
@@ -98,11 +65,10 @@ app.post('/login/', async (req, res) => {
     return
   }
   res.json({ success: false })
-<<<<<<< HEAD
 })
-// retrieving students information
+//:1 retrieving students information
 app.get('/students', (req, res) => {
-  // 
+  //
   const result = req.db.collection('exam').find({});
   result.forEach(
     data => {
@@ -143,8 +109,6 @@ app.post('/invitation', function (req, res) {
 
   });
 });
-=======
-})
 
 //:1 create staff
 app.post('/admin/create/staff', check_token, async (req, res) => {
@@ -178,6 +142,5 @@ app.use(function (error, req, res, next) {
   res.json({ message: error.message })
 })
 // endfold
->>>>>>> 38967a47b25a0dfca3205e1a9ff0fdc25aa3e997
 
 app.listen(8080, () => console.log('listening on 8080'))
