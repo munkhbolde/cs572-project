@@ -1,0 +1,21 @@
+<h1> staff logged in</h1>
+<table>
+  <tr>
+    <th> ID </th>
+    <th> NAME</th>
+    <th> EMAIL ADDRESS</th>
+    <th> EXAM</th>
+    <th> STATUS</th>
+    <th> RESULT</th>
+  </tr>
+  <tr *ngFor='let stuinfo of studentinfo'>
+    <td>{{stuinfo.id}}</td>
+    <td>{{stuinfo.name}}</td>
+    <td>{{stuinfo.email}}</td>
+    <td>
+      <button type="submit" (click)='[sendinvitation(stuinfo.email)]' [disabled]="!'stuinfo.email'">Invite </button>
+    </td>
+    <td>{{stuinfo.status}}</td>
+    <td><button type="submit" (click)='[sendemail(student.email)]' [disabled]="!'stuinfo.email'">Send Email</button></td>
+  </tr>
+</table>

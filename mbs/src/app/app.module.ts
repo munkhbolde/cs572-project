@@ -8,10 +8,12 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
 import { AdminLogin } from "./admin/login";
 import { StaffCreate } from "./admin/create-staff";
+import { StaffcompComponent } from './staffcomp/staffcomp.component';
+import { StaffserviceService } from './staffservice.service';
 import { AceEditorModule } from "ng2-ace-editor";
 
 @NgModule({
-  declarations: [AppComponent, QuestionComponent, AdminLogin, StaffCreate],
+  declarations: [AppComponent, QuestionComponent, AdminLogin, StaffCreate, StaffcompComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -19,7 +21,7 @@ import { AceEditorModule } from "ng2-ace-editor";
     HttpClientModule,
     AceEditorModule
   ],
-  providers: [],
+  providers: [StaffserviceService],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }
