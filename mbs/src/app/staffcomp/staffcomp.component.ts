@@ -11,8 +11,8 @@ import { observable, Observable } from 'rxjs';
 })
 export class StaffcompComponent implements OnInit {
   studentinfo = []
-  //= [{ "id": 1, "name": "selina", "exam": "took", "result": "result", "email": "selina@gmail.com" },
-  //{ "id": 1, "name": "selina", "exam": "took", "result": "result", "email": "selina@gmail.com" }];
+  // studentinfo = [{ "id": 1, "name": "selina", "exam": "took", "result": "result", "email": "selina@gmail.com" },
+  // { "id": 1, "name": "selina", "exam": "took", "result": "result", "email": "selina@gmail.com" }];
 
   constructor(private stafservice: StaffserviceService) {
     stafservice.getstudentinfo().subscribe(
