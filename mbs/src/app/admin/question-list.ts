@@ -29,9 +29,9 @@ import { HttpClient } from '@angular/common/http'
 })
 
 export class QuestionList implements OnInit {
-	title: 'Question List'
+	title = 'Question List'
 	url = 'http://localhost:8080/admin/questions/'
-	questions: []
+	questions = []
 
 	constructor(private http: HttpClient) {}
 
