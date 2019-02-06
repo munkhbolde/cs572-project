@@ -220,11 +220,7 @@ app.post('/admin/create/staff', check_token, async (req, res) => {
 app.get('/admin/staffs/', check_token, async (req, res) => {
   let result = []
   const pointer = await req.db.collection('user')
-<<<<<<< HEAD
     .find({ type: { $ne: 'admin' } }).project({ password: 0 })
-=======
-    .find({type: {$ne: 'admin'}}).project({password: 0})
->>>>>>> dc62b4b86ef9641dc354cbc4196546f17b29b05e
     .forEach((data) => result.push(data))
 
   res.json({ success: true, data: result })
@@ -236,18 +232,18 @@ app.patch('/admin/staffs/', check_token, async (req, res) => {
   const type = req.body.type
   console.log(req.body)
   await req.db.collection('user').updateOne(
-    {name: name},
-    {$set: {type: type}}
+    { name: name },
+    { $set: { type: type } }
   )
 
-  res.json({success: true})
+  res.json({ success: true })
 })
 
 //:1 staff delete
-app.delete('/admin/staffs/' , check_token, async (req, res) => {
+app.delete('/admin/staffs/', check_token, async (req, res) => {
   console.log(req.body)
-  await req.db.collection('user').remove({name: req.body.name})
-  res.json({success: true})
+  await req.db.collection('user').remove({ name: req.body.name })
+  res.json({ success: true })
 })
 
 //:1 error
