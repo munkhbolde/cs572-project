@@ -12,7 +12,6 @@ import { ErrorInterceptor } from './services/error-interceptor'
 // Used for Exam
 import { QuestionComponent } from './student/question/question.component'
 import { AceEditorModule } from 'ng2-ace-editor'
-import { TransferDataService } from './services/transfer-data.service'
 
 // Used for admin
 import { AdminLogin } from './admin/login'
@@ -45,8 +44,7 @@ import { StartExamComponent } from './student/start-exam/start-exam.component';
 		AppRoutingModule,
 		ReactiveFormsModule,
 		HttpClientModule,
-		AceEditorModule,
-		TransferDataService
+		AceEditorModule
 	],
 	providers: [
 		{ provide: HTTP_INTERCEPTORS, useClass: Interceptor, multi: true },

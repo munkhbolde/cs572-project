@@ -15,6 +15,8 @@ export class QuestionComponent implements OnInit {
   @Input() q;
   @Input() number;
 
+  private snapshot: string[] = [];
+  private code: string = "";
   private exam = [{
     question: "What is an array",
     answer: "",
@@ -31,14 +33,16 @@ export class QuestionComponent implements OnInit {
     timeSpent: 0,
     snapshot: []
   }];
-  private snapshot: string[] = [];
-  private code: string = "";
 
   constructor(private transfer: TransferDataService) { }
+  data = this.transfer.getData();
 
   ngOnInit() {
-    let data: any[] = JSON.parse(this.transfer.getData().toString());
-    console.log(data);
+    if (this.data) {
+      console.log(this.data);
+    } else {
+      console.log("No data");
+    }
     if (this.q == null) {
       this.q = this.exam[0].question;
       this.number = 1;
