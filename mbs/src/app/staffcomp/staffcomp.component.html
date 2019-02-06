@@ -1,4 +1,5 @@
 <h1> staff logged in</h1>
+<!-- <p appInvitedir [result]="stuinfo.status">paragraph is visible or not</p> -->
 <table>
   <tr>
     <th> ID </th>
@@ -8,14 +9,29 @@
     <th> STATUS</th>
     <th> RESULT</th>
   </tr>
-  <tr *ngFor='let stuinfo of studentinfo'>
+  <tr *ngFor='let stuinfo of studentinfo' [ngSwitch]="stuinfo.status">
     <td>{{stuinfo.id}}</td>
     <td>{{stuinfo.name}}</td>
     <td>{{stuinfo.email}}</td>
-    <td>
-      <button type="submit" (click)='[sendinvitation(stuinfo.email)]' [disabled]="!'stuinfo.email'">Invite </button>
+    <td *ngSwitchCase="'sent'">
+      <button type="submit" (click)='[sendemail(stuinfo.email)]' [disabled]="true">Invite</button>
+    </td>
+    <td *ngSwitchCase="'pass'">
+      <button type="submit" (click)='[sendemail(stuinfo.email)]' [disabled]="true">Invite</button>
+    </td>
+    <td *ngSwitchCase="'fail'">
+      <button type="submit" (click)='[sendemail(stuinfo.email)]' [disabled]="true">Invite</button>
+    </td>
+    <td *ngSwitchCase="'answered'">
+      <button type="submit" (click)='[sendemail(stuinfo.email)]' [disabled]="true">Invite</button>
+    </td>
+    <td *ngSwitchDefault>
+      <button type="submit" (click)='[sendemail(stuinfo.email)]' [disabled]="false">Invite</button>
     </td>
     <td>{{stuinfo.status}}</td>
-    <td><button type="submit" (click)='[sendemail(student.email)]' [disabled]="!'stuinfo.email'">Send Email</button></td>
+    <td>
+      <button type="submit" (click)='[sendinvitation(stuinfo.email)]' [disabled]="!'stuinfo.status'">Send Email
+      </button>
+    </td>
   </tr>
 </table>

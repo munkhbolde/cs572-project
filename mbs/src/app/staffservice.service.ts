@@ -6,22 +6,18 @@ import { from } from 'rxjs';
   providedIn: 'root'
 })
 export class StaffserviceService {
-
   private userinfourl = 'http://localhost:8080/students'
   private sendemailurl = 'http://localhost:8080/sendemail'
   private sendinvitationurl = 'http://localhost:8080/invitation'
+
   constructor(private http: HttpClient) { }
-
   getstudentinfo() {
-
     return this.http.get<any>(this.userinfourl)
-
   }
   sendemail(email) {
-    return this.http.post<any>(this.sendemailurl, email)
+    return this.http.post<any>(this.sendemailurl, { "email": email })
   }
   sendinvitation(email) {
-    console.log(email)
-    return this.http.post<any>(this.sendinvitationurl, email)
+    return this.http.post<any>(this.sendinvitationurl, { "email": email })
   }
 }

@@ -20,7 +20,7 @@ import { QuestionList } from './admin/question-list'
 import { StaffList } from './admin/staff-list'
 
 // Used for staff
-import { StaffcompComponent } from './staffcomp/staffcomp.component'
+import { StaffcompComponent } from './staffcomp/staffcomp.component';
 
 
 @NgModule({

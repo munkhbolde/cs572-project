@@ -8,23 +8,19 @@ const path = require('path')
 const nodemailer = require('nodemailer')
 const bcrypt = require('bcrypt');
 const config = require('./dotenv')
-
 //:1 helper
 let db
 const client = mongo(config.dbConnection, { useNewUrlParser: true })
 app = express()
 client.connect()
 setTimeout(() => { db = client.db('mbs_cs572') }, 1000)
-
 hashme = function (password) {
   const salt = bcrypt.genSaltSync(10)
   return bcrypt.hashSync(password, salt)
 }
-
 compare = function (plain, hash) {
   return bcrypt.compareSync(plain, hash)
 }
-
 //:1 middlewares
 app.use(parser.json())
 app.use(cors())
@@ -33,12 +29,10 @@ app.use((req, res, next) => {
   req.db = db
   next()
 })
-
 check_token = function (req, res, next) {
   if (!req.headers.authorization) {
     res.render('403', { status: 403, url: req.url })
   }
-
   const token = req.headers.authorization.split(' ')[1]
   jwt.verify(token, 'secret', function (err, decoded) {
     if (decoded.type !== 'admin')
@@ -54,7 +48,6 @@ app.post('/login/', async (req, res) => {
     .find({ name: req.body.uname }).forEach(data => {
       if (compare(req.body.password, data.password)) user = data
     })
-
   if (user) {
     const token = jwt.sign({
       name: user.name,
@@ -66,21 +59,43 @@ app.post('/login/', async (req, res) => {
   }
   res.json({ success: false })
 })
+// check token 
+authenticatestaff = function (req, res, next) {
+  module.exports = function auth(req, res, next) {
+    const token = req.header("Bearer");
+    if (!token) {
+      return res.status(401).send("Access denied. No token provided.");
+    }
 
+    try {
+      const decoded = jwt.verify(token, 'secret');
+      req.user = decoded;
+      next();
+    } catch (error) {
+      res.status(400).send("Invalid token.");
+    }
+
+  }
+}
 //:1 retrieving students information
-app.get('/students', (req, res) => {
-  //
-  const result = req.db.collection('exam').find({});
-  result.forEach(
+app.get('/students', async (req, res) => {
+
+  let result = []
+  const pointer = await req.db.collection('exam').find().forEach(
     data => {
-      console.log(data.students.email);
-      res.json(data.students)
-    })
-})
+
+      if (data.students) {
+        result.push(data.students)
+      }
+    }
+  )
+  res.json(result)
+});
+
 // sending an invitation through email
 app.post('/invitation', function (req, res) {
-
   // will take email from req.email
+  console.log(req.body)
   var smtpTransport = nodemailer.createTransport({
 
     service: 'gmail',
@@ -93,22 +108,65 @@ app.post('/invitation', function (req, res) {
 
   // setup e-mail data with unicode symbols
   var mailOptions = {
-    from: "Fred Foo ✔ <selina.tesfabrhan1@gmail.com>",
-    to: "selina.tesfabrhan@gmail.com",
+
+    from: "maharishi universty ✔ <selina.tesfabrhan1@gmail.com>",
+    to: req.body.email,
     subject: "take exam",
     text: "maharishi ",
-    html: "<b>click button to take exam</b><button>Take Exam</button>"
+    html: `<b>click button to take exam</b><br><a href="http://localhost:4200/staff"><button>Take Exam</button></a>`
   }
-
   // send mail with defined transport object
   smtpTransport.sendMail(mailOptions, function (error, response) {
     if (error) {
       console.log(error);
     } else {
-      console.log("Message sent: " + response.message);
+      console.log("Message sent: ");
     }
-
   });
+  res.json({ success: true, pass: "pass" })
+});
+//
+sendemailtostudent = function (email, message) {
+  var smtpTransport = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'selina.tesfabrhan1@gmail.com',
+      pass: 'freweyni11'
+    },
+    tls: { rejectUnauthorized: false }
+  });  // setup e-mail data with unicode symbols
+  var mailOptions = {
+    from: "maharishi university ✔ <selina.tesfabrhan1@gmail.com>",
+    to: email, // taking email from request
+    subject: "take exam",
+    text: "maharishi universty of managment " + message,
+  }  // send mail with defined transport object
+  smtpTransport.sendMail(mailOptions, function (error, response) {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log("Message sent: ");
+    }
+  });
+}
+// send email
+app.post('/sendemail', async function (req, res) {
+  const passmessage = "congratulations you passed the exam"
+  const failmessage = "sorry you failed in the exam "
+  const pointer = await req.db.collection('exam').findOne({ 'students.email': req.body.email })
+  for (let i of pointer.students) {
+    console.log(i + " user")
+    if (i.status === "pass") {
+      console.log(i.email)
+      sendemailtostudent(i.email, passmessage)
+    }
+    if (i.status === "fail") {
+      sendemailtostudent(i.email, failmessage)
+    } else {
+      res.json({ message: "cannot send message no result of exam available" })
+    }
+  }
+  res.json({ success: true, pass: "pass" })
 });
 
 //:1 create staff
@@ -123,10 +181,10 @@ app.post('/admin/create/staff', check_token, async (req, res) => {
 
 //:1 create question
 app.post('/admin/create/question', check_token, async (req, res) => {
-  const q = {question :req.body.question, status: 'active'}
+  const q = { question: req.body.question, status: 'active' }
 
-  req.db.collection('exam').update({}, {$addToSet: {questions: q}})
-  res.json({success: true})
+  req.db.collection('exam').update({}, { $addToSet: { questions: q } })
+  res.json({ success: true })
 })
 
 //:1 question list
@@ -142,10 +200,10 @@ app.get('/admin/questions/', check_token, async (req, res) => {
 app.get('/admin/staffs/', check_token, async (req, res) => {
   let result = []
   const pointer = await req.db.collection('user')
-    .find({}).project({password: 0})
+    .find({}).project({ password: 0 })
     .forEach((data) => result.push(data))
 
-  res.json({ success: true, data: result})
+  res.json({ success: true, data: result })
 })
 
 //:1 error
