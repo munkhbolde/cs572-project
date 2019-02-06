@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-start-exam',
@@ -6,10 +7,18 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./start-exam.component.css']
 })
 export class StartExamComponent implements OnInit {
+  url = 'http://localhost:8080/start'
 
-  constructor() { }
+  constructor(private httpClient: HttpClient) { }
 
   ngOnInit() {
+    this.loadData();
+  }
+
+  loadData() {
+    this.httpClient.get(this.url).subscribe((res: any) => {
+      console.log(res);
+    });
   }
 
   startExam() {

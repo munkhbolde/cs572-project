@@ -29,7 +29,7 @@ export class CreateQuestion {
 	questionForm: FormGroup
 	url = 'http://localhost:8080/admin/create/question'
 
-	constructor(private formBuilder: FormBuilder, private http: HttpClient){
+	constructor(private formBuilder: FormBuilder, private http: HttpClient) {
 		this.questionForm = formBuilder.group({
 			question: ['', Validators.required]
 		})

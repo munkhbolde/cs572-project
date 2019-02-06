@@ -176,10 +176,10 @@ app.post('/sendemail', authenticatestaff, function (req, res) {
 });
 //:1 create question
 app.post('/admin/create/question', check_token, async (req, res) => {
-  const q = {question: req.body.question, status: 'active'}
+  const q = { question: req.body.question, status: 'active' }
 
-  req.db.collection('exam').updateOne({}, {$addToSet: {questions: q}})
-  res.json({success: true})
+  req.db.collection('exam').updateOne({}, { $addToSet: { questions: q } })
+  res.json({ success: true })
 })
 //:1 question list
 app.get('/admin/questions/', check_token, async (req, res) => {
@@ -238,6 +238,18 @@ app.delete('/admin/staffs/', check_token, async (req, res) => {
   console.log(req.body)
   await req.db.collection('user').remove({ name: req.body.name })
   res.json({ success: true })
+})
+
+//get questions for exam
+app.get('/start', async (req, res) => {
+  let result = []
+  const pointer = await req.db.collection('exam')
+    .find({
+      "questions.status": "enabled"
+    }, {
+        "_id": 0, "questions.question": 1
+      }).forEach((data) => result = data)
+  res.json({ success: true, data: result.questions })
 })
 
 //:1 error
