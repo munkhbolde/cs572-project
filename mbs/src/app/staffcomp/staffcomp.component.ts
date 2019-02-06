@@ -32,12 +32,16 @@ export class StaffcompComponent implements OnInit {
       .subscribe((d) => this.staffresponse = d
         , (err) => console.log(err))
   }
-  sendemail(email) {
-
-    this.stafservice.sendemail(email)
-      .subscribe((d) => this.staffresponse = d
-        , (err) => console.log(err))
+  sendemail(email, state) {
+    console.log(email + state)
+    if (state === "pass" || state === "fail") {
+      this.stafservice.sendemail(email, state)
+        .subscribe((d) => this.staffresponse = d
+          , (err) => console.log(err))
+    }
+    else {
+      console.log('result didnot come can not send email')
+    }
   }
-
 
 }

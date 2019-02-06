@@ -14,8 +14,8 @@ export class StaffserviceService {
   getstudentinfo() {
     return this.http.get<any>(this.userinfourl)
   }
-  sendemail(email) {
-    return this.http.post<any>(this.sendemailurl, { "email": email })
+  sendemail(email, state) {
+    return this.http.post<any>(this.sendemailurl, { "email": email, "status": state })
   }
   sendinvitation(email) {
     return this.http.post<any>(this.sendinvitationurl, { "email": email })

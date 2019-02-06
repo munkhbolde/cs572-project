@@ -61,43 +61,38 @@ app.post('/login/', async (req, res) => {
 })
 // check token 
 authenticatestaff = function (req, res, next) {
-  module.exports = function auth(req, res, next) {
-    const token = req.header("Bearer");
-    if (!token) {
-      return res.status(401).send("Access denied. No token provided.");
-    }
+  debugger
 
-    try {
-      const decoded = jwt.verify(token, 'secret');
-      req.user = decoded;
-      next();
-    } catch (error) {
-      res.status(400).send("Invalid token.");
-    }
-
+  const token = req.headers.authorization.split(' ')[1]
+  console.log(token)
+  if (!token) {
+    return res.status(401).send("Access denied. No token provided.");
   }
+
+  try {
+    const decoded = jwt.verify(token, 'secret');
+    req.user = decoded;
+    next();
+  } catch (error) {
+    res.status(400).send("Invalid token.");
+  }
+
 }
 //:1 retrieving students information
-app.get('/students', async (req, res) => {
-
+app.get('/students', authenticatestaff, async (req, res) => {
   let result = []
   const pointer = await req.db.collection('exam').find().forEach(
     data => {
-
       if (data.students) {
         result.push(data.students)
       }
-    }
-  )
+    })
   res.json(result)
 });
-
 // sending an invitation through email
-app.post('/invitation', function (req, res) {
+app.post('/invitation', authenticatestaff, function (req, res) {
   // will take email from req.email
-  console.log(req.body)
   var smtpTransport = nodemailer.createTransport({
-
     service: 'gmail',
     auth: {
       user: 'selina.tesfabrhan1@gmail.com',
@@ -105,7 +100,6 @@ app.post('/invitation', function (req, res) {
     },
     tls: { rejectUnauthorized: false }
   });
-
   // setup e-mail data with unicode symbols
   var mailOptions = {
 
@@ -113,14 +107,17 @@ app.post('/invitation', function (req, res) {
     to: req.body.email,
     subject: "take exam",
     text: "maharishi ",
-    html: `<b>click button to take exam</b><br><a href="http://localhost:4200/staff"><button>Take Exam</button></a>`
+    html: `<b>click button to take exam</b><br><a href="http://localhost:4200/exam"><button>Take Exam</button></a>`
   }
   // send mail with defined transport object
-  smtpTransport.sendMail(mailOptions, function (error, response) {
+  smtpTransport.sendMail(mailOptions, async function (error, response) {
     if (error) {
       console.log(error);
     } else {
       console.log("Message sent: ");
+      const pointer = await req.db.collection('exam').updateOne({ 'students.email': req.body.email }, { $set: { 'students.$.status': "sent" } })
+
+      // res.json({ success: true, pass: "message sent" })
     }
   });
   res.json({ success: true, pass: "pass" })
@@ -144,68 +141,52 @@ sendemailtostudent = function (email, message) {
   smtpTransport.sendMail(mailOptions, function (error, response) {
     if (error) {
       console.log(error);
+      res.end()
     } else {
       console.log("Message sent: ");
+      res.end()
     }
   });
 }
 // send email
-app.post('/sendemail', async function (req, res) {
+app.post('/sendemail', authenticatestaff, function (req, res) {
   const passmessage = "congratulations you passed the exam"
   const failmessage = "sorry you failed in the exam "
-  const pointer = await req.db.collection('exam').findOne({ 'students.email': req.body.email })
-  for (let i of pointer.students) {
-    console.log(i + " user")
-    if (i.status === "pass") {
-      console.log(i.email)
-      sendemailtostudent(i.email, passmessage)
-    }
-    if (i.status === "fail") {
-      sendemailtostudent(i.email, failmessage)
-    } else {
-      res.json({ message: "cannot send message no result of exam available" })
-    }
+  const emailadd = req.body.email
+  const studstatus = req.body.status
+  if (studstatus === "pass") {
+    sendemailtostudent(emailadd, passmessage)
   }
-  res.json({ success: true, pass: "pass" })
+  if (studstatus === "fail") {
+    sendemailtostudent(emailadd, failmessage)
+  } else {
+    res.json({ message: "cannot send message no result of exam available" })
+  }
 });
-
 //:1 create question
 app.post('/admin/create/question', check_token, async (req, res) => {
-<<<<<<< HEAD
   const q = { question: req.body.question, status: 'active' }
-
-  req.db.collection('exam').update({}, { $addToSet: { questions: q } })
+  req.db.collection('exam').updateOne({}, { $addToSet: { questions: q } })
   res.json({ success: true })
-=======
-  const q = {question: req.body.question, status: 'active'}
-
-  req.db.collection('exam').updateOne({}, {$addToSet: {questions: q}})
-  res.json({success: true})
->>>>>>> 001ba73c3e77a2cdb3d3f7db653485ec8bc83bd3
 })
-
 //:1 question list
 app.get('/admin/questions/', check_token, async (req, res) => {
   let result = []
   const pointer = await req.db.collection('exam')
     .find().forEach((data) => result = data)
-
   res.json({ success: true, data: result.questions })
 })
-
 //:1 edit question status
 app.post('/admin/questions/', check_token, async (req, res) => {
   const question = req.body.question
   const status = req.body.status
   const pointer = await req.db.collection('exam')
-  .updateOne(
-    {'questions': {'$elemMatch': {'question': {'$eq': question}}}},
-    {'$set': {'questions.$.status': status}}
-  )
-
-  res.json({ success: true})
+    .updateOne(
+      { 'questions': { '$elemMatch': { 'question': { '$eq': question } } } },
+      { '$set': { 'questions.$.status': status } }
+    )
+  res.json({ success: true })
 })
-
 //:1 create staff
 app.post('/admin/create/staff', check_token, async (req, res) => {
   const name = req.body.name
@@ -221,11 +202,7 @@ app.post('/admin/create/staff', check_token, async (req, res) => {
 app.get('/admin/staffs/', check_token, async (req, res) => {
   let result = []
   const pointer = await req.db.collection('user')
-<<<<<<< HEAD
-    .find({}).project({ password: 0 })
-=======
-    .find({type: {$ne: 'admin'}}).project({password: 0})
->>>>>>> 001ba73c3e77a2cdb3d3f7db653485ec8bc83bd3
+    .find({ type: { $ne: 'admin' } }).project({ password: 0 })
     .forEach((data) => result.push(data))
 
   res.json({ success: true, data: result })
