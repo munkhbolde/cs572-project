@@ -39,6 +39,7 @@ export class CreateQuestion {
 		const data = {
 			question: this.questionForm.controls.question.value
 		}
+
 		this.http.post(this.url, data).subscribe((res) => {
 			console.log(res)
 		})

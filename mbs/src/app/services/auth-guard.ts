@@ -11,7 +11,6 @@ export class AuthGuard implements CanActivate {
 			this.role = location.pathname.split("/")[1]
 
 			if (localStorage['token'] === undefined) {
-				console.log('bandi')
 				return this.navigate()
 			}
 
