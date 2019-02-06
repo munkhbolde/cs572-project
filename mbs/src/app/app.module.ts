@@ -22,11 +22,8 @@ import { StaffList } from './admin/staff-list'
 
 // Used for staff
 import { StaffcompComponent } from './staffcomp/staffcomp.component';
-<<<<<<< HEAD
 import { IsdisabledDirective } from './staffcomp/isdisabled.directive';
-=======
 import { StartExamComponent } from './student/start-exam/start-exam.component';
->>>>>>> dc62b4b86ef9641dc354cbc4196546f17b29b05e
 
 
 @NgModule({
@@ -39,11 +36,8 @@ import { StartExamComponent } from './student/start-exam/start-exam.component';
 		QuestionList,
 		StaffcompComponent,
 		StaffList,
-<<<<<<< HEAD
 		IsdisabledDirective,
-=======
 		StartExamComponent,
->>>>>>> dc62b4b86ef9641dc354cbc4196546f17b29b05e
 	],
 	imports: [
 		BrowserModule,
