@@ -13,15 +13,16 @@ import { StaffList } from './admin/staff-list'
 import { StartExamComponent } from './student/start-exam/start-exam.component';
 
 const routes: Routes = [
-  { path: 'login', component: AdminLogin },
   { path: 'exam', component: QuestionComponent },
+  { path: 'login', component: AdminLogin },
+	{ path: 'admin', redirectTo: 'admin/questions' },
 	{ path: 'admin/create/staff', component: CreateStaff, canActivate: [AuthGuard] },
 	{ path: 'admin/create/question', component: CreateQuestion, canActivate: [AuthGuard] },
 	{ path: 'admin/questions', component: QuestionList, canActivate: [AuthGuard] },
 	{ path: 'admin/staffs', component: StaffList, canActivate: [AuthGuard] },
 	{ path: 'staff', component: StaffcompComponent, canActivate: [AuthGuard] },
   { path: 'start', component: StartExamComponent },
-	{ path: '**', redirectTo: 'login'},
+	{ path: '**', redirectTo: 'login' },
 ]
 
 @NgModule({

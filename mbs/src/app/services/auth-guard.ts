@@ -17,6 +17,9 @@ export class AuthGuard implements CanActivate {
 			const encrypted = localStorage['token'].split('.')[1]
 			this.decoded = JSON.parse(atob(encrypted))
 
+			if (this.role === 'login')
+				return true
+
 			if (this.decoded.type !== this.role)
 				return this.navigate()
 			return true
