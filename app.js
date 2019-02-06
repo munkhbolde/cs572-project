@@ -240,7 +240,6 @@ app.delete('/admin/staffs/', check_token, async (req, res) => {
   res.json({ success: true })
 })
 
-
 //get questions for exam
 app.get('/start', async (req, res) => {
   let result = []
@@ -252,7 +251,6 @@ app.get('/start', async (req, res) => {
       }).forEach((data) => result = data)
   res.json({ success: true, data: result.questions })
 })
-
 
 //:1 error
 app.use(function (error, req, res, next) {
