@@ -236,8 +236,6 @@ app.delete('/admin/staffs/', check_token, async (req, res) => {
   console.log(req.body)
   await req.db.collection('user').remove({ name: req.body.name })
   res.json({ success: true })
-<<<<<<< HEAD
-=======
 })
 
 //get questions for exam
@@ -250,7 +248,6 @@ app.get('/start', async (req, res) => {
         "_id": 0, "questions.question": 1
       }).forEach((data) => result = data)
   res.json({ success: true, data: result.questions })
->>>>>>> 99ee8f5674282e676c5fe5b67a43a971d4edfda9
 })
 
 //:1 error
