@@ -72,10 +72,7 @@ app.post('/login/', async (req, res) => {
 
 // check token
 authenticatestaff = function (req, res, next) {
-  debugger
-
   const token = req.headers.authorization.split(' ')[1]
-  console.log(token)
   if (!token) {
     return res.status(401).send("Access denied. No token provided.");
   }
@@ -102,6 +99,7 @@ app.get('/students', authenticatestaff, async (req, res) => {
 });
 // sending an invitation through email
 app.post('/invitation', authenticatestaff, function (req, res) {
+  const token = req.headers.authorization.split(' ')[1]
   // will take email from req.email
   var smtpTransport = nodemailer.createTransport({
     service: 'gmail',
@@ -112,13 +110,13 @@ app.post('/invitation', authenticatestaff, function (req, res) {
     tls: { rejectUnauthorized: false }
   });
   // setup e-mail data with unicode symbols
-  var mailOptions = {
 
+  var mailOptions = {
     from: "maharishi universty ✔ <selina.tesfabrhan1@gmail.com>",
     to: req.body.email,
     subject: "take exam",
     text: "maharishi ",
-    html: `<b>click button to take exam</b><br><a href="http://localhost:4200/exam"><button>Take Exam</button></a>`
+    html: `<b>click button to take exam</b><br><a href="http://localhost:4200/start/?tok=${token}"><button>Take Exam</button></a>`
   }
   // send mail with defined transport object
   smtpTransport.sendMail(mailOptions, async function (error, response) {

@@ -3,6 +3,8 @@ import "ace-builds/webpack-resolver";
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { edit, Editor } from 'brace';
 import { AceEditorComponent } from 'ng2-ace-editor';
+import { TransferDataService } from '../../services/transfer-data.service'
+
 @Component({
   selector: "app-question",
   templateUrl: "./question.component.html",
@@ -32,9 +34,11 @@ export class QuestionComponent implements OnInit {
   private snapshot: string[] = [];
   private code: string = "";
 
-  constructor() { }
+  constructor(private transfer: TransferDataService) { }
 
   ngOnInit() {
+    let data: any[] = JSON.parse(this.transfer.getData().toString());
+    console.log(data);
     if (this.q == null) {
       this.q = this.exam[0].question;
       this.number = 1;
