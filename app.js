@@ -51,6 +51,15 @@ check_token = function (req, res, next) {
   next()
 }
 
+student_token = function (req, res, next) {
+  if (!req.headers.authorization) {
+    res.status(401);
+    res.json({ status: 401, url: req.url });
+    return;
+  }
+  next()
+}
+
 //:1 login
 app.post('/login/', async (req, res) => {
   let user = undefined
@@ -99,7 +108,12 @@ app.get('/students', authenticatestaff, async (req, res) => {
 });
 // sending an invitation through email
 app.post('/invitation', authenticatestaff, function (req, res) {
-  const token = req.headers.authorization.split(' ')[1]
+
+  const token = jwt.sign({
+    email: req.body.email
+  }, 'secret', { expiresIn: '2h' });
+  res.header('Authorizatin', `Bearer ${token}`)
+
   // will take email from req.email
   var smtpTransport = nodemailer.createTransport({
     service: 'gmail',
@@ -239,7 +253,7 @@ app.delete('/admin/staffs/', check_token, async (req, res) => {
 })
 
 //get questions for exam
-app.get('/start', async (req, res) => {
+app.get('/start', student_token, async (req, res) => {
   let result = []
   const pointer = await req.db.collection('exam')
     .find({
