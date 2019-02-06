@@ -59,7 +59,8 @@ app.post('/login/', async (req, res) => {
   }
   res.json({ success: false })
 })
-// check token 
+
+// check token
 authenticatestaff = function (req, res, next) {
   module.exports = function auth(req, res, next) {
     const token = req.header("Bearer");
@@ -171,17 +172,10 @@ app.post('/sendemail', async function (req, res) {
 
 //:1 create question
 app.post('/admin/create/question', check_token, async (req, res) => {
-<<<<<<< HEAD
-  const q = { question: req.body.question, status: 'active' }
-
-  req.db.collection('exam').update({}, { $addToSet: { questions: q } })
-  res.json({ success: true })
-=======
   const q = {question: req.body.question, status: 'active'}
 
   req.db.collection('exam').updateOne({}, {$addToSet: {questions: q}})
   res.json({success: true})
->>>>>>> 001ba73c3e77a2cdb3d3f7db653485ec8bc83bd3
 })
 
 //:1 question list
@@ -221,14 +215,30 @@ app.post('/admin/create/staff', check_token, async (req, res) => {
 app.get('/admin/staffs/', check_token, async (req, res) => {
   let result = []
   const pointer = await req.db.collection('user')
-<<<<<<< HEAD
-    .find({}).project({ password: 0 })
-=======
     .find({type: {$ne: 'admin'}}).project({password: 0})
->>>>>>> 001ba73c3e77a2cdb3d3f7db653485ec8bc83bd3
     .forEach((data) => result.push(data))
 
   res.json({ success: true, data: result })
+})
+
+//:1 staff edit
+app.patch('/admin/staffs/', check_token, async (req, res) => {
+  const name = req.body.name
+  const type = req.body.type
+  console.log(req.body)
+  await req.db.collection('user').updateOne(
+    {name: name},
+    {$set: {type: type}}
+  )
+
+  res.json({success: true})
+})
+
+//:1 staff delete
+app.delete('/admin/staffs/' , check_token, async (req, res) => {
+  console.log(req.body)
+  await req.db.collection('user').remove({name: req.body.name})
+  res.json({success: true})
 })
 
 //:1 error

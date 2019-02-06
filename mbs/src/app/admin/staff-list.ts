@@ -1,5 +1,5 @@
 import { Component , OnInit, ViewEncapsulation } from '@angular/core'
-import { HttpClient } from '@angular/common/http'
+import { HttpClient, HttpHeaders } from '@angular/common/http'
 
 @Component({
 	selector: 'staff-list',
@@ -10,7 +10,8 @@ import { HttpClient } from '@angular/common/http'
 			<tr>
 				<th>#</th>
 				<th>User Name</th>
-				<th>Type</th>
+				<th>Type/Status</th>
+				<th></th>
 				<th></th>
 			</tr>
 		</thead>
@@ -20,6 +21,7 @@ import { HttpClient } from '@angular/common/http'
 				<th>User name</th>
 				<th>Type</th>
 				<th></th>
+				<th></th>
 			</tr>
 		</tfoot>
 		<tbody>
@@ -27,7 +29,8 @@ import { HttpClient } from '@angular/common/http'
 				<th>{{ staff._id }}</th>
 				<td>{{ staff.name }}</td>
 				<td>{{ staff.type }}</td>
-				<td class="button is-text" (click)="edit(staff)"> edit</td>
+				<td class="has-text-info" (click)="edit(staff)">change status</td>
+				<td class="has-text-danger" (click)="delete(staff.name)">delete</td>
 			</tr>
 		</tbody>
 	</table>
@@ -40,13 +43,45 @@ export class StaffList implements OnInit {
 	constructor(private http: HttpClient) {}
 
 	ngOnInit() {
+		this.loadData()
+	}
+
+	loadData() {
 		this.http.get(this.url).subscribe((res:any) => {
 			console.log(res)
 			this.staffs = res.data
 		})
 	}
 
-	edit(data) {
-		console.log(data)
+	edit(staff) {
+		if (!confirm("Do you want to activate or disable status"))
+			return
+
+		const data = {
+			name: staff.name,
+			type: staff.type === 'staff' ? 'disabled-staff' : 'staff'
+		}
+
+		this.http.patch(this.url, data).subscribe((res:any) => {
+			console.log(res)
+			this.loadData()
+		})
+	}
+
+	delete(name) {
+		if (!confirm("Do you want to delete this staff"))
+			return
+
+		const options = {
+			headers: new HttpHeaders({
+				'Content-Type': 'application/json',
+			}),
+			body: {name: name},
+		}
+
+		this.http.delete(this.url, options).subscribe((res: any) => {
+			if(res.success)
+				this.loadData()
+		})
 	}
 }
