@@ -3,17 +3,28 @@ import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from
 
 @Injectable({ providedIn: 'root' })
 export class AuthGuard implements CanActivate {
+		decoded: any
+		role: string
+    constructor(private router: Router) {}
 
-    constructor(private router: Router) { }
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+			this.role = location.pathname.split("/")[1]
 
-        if (localStorage.getItem('token')) {
-            // logged in so return true
-            return true;
-        }
+			if (localStorage['token'] === undefined) {
+				console.log('bandi')
+				return this.navigate()
+			}
 
-        // not logged in so redirect to login page with the return url
-        this.router.navigate(['/login']);
-        return false;
+			const encrypted = localStorage['token'].split('.')[1]
+			this.decoded = JSON.parse(atob(encrypted))
+
+			if (this.decoded.type !== this.role)
+				return this.navigate()
+			return true
     }
+
+		navigate() {
+			this.router.navigate(['/login'])
+			return false
+		}
 }
