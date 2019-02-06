@@ -10,6 +10,7 @@ import { CreateStaff } from './admin/create-staff'
 import { CreateQuestion } from './admin/create-question'
 import { QuestionList } from './admin/question-list'
 import { StaffList } from './admin/staff-list'
+import { StartExamComponent } from './student/start-exam/start-exam.component';
 
 const routes: Routes = [
   { path: 'login', component: AdminLogin },
@@ -19,7 +20,8 @@ const routes: Routes = [
 	{ path: 'admin/questions', component: QuestionList, canActivate: [AuthGuard] },
 	{ path: 'admin/staffs', component: StaffList, canActivate: [AuthGuard] },
 	{ path: 'staff', component: StaffcompComponent, canActivate: [AuthGuard] },
-	{ path: '**', redirectTo: 'login'}
+  { path: 'start', component: StartExamComponent },
+	{ path: '**', redirectTo: 'login'},
 ]
 
 @NgModule({
