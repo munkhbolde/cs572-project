@@ -62,10 +62,7 @@ app.post('/login/', async (req, res) => {
 
 // check token
 authenticatestaff = function (req, res, next) {
-  debugger
-
   const token = req.headers.authorization.split(' ')[1]
-  console.log(token)
   if (!token) {
     return res.status(401).send("Access denied. No token provided.");
   }
@@ -92,6 +89,7 @@ app.get('/students', authenticatestaff, async (req, res) => {
 });
 // sending an invitation through email
 app.post('/invitation', authenticatestaff, function (req, res) {
+  const token = req.headers.authorization.split(' ')[1]
   // will take email from req.email
   var smtpTransport = nodemailer.createTransport({
     service: 'gmail',
@@ -102,13 +100,13 @@ app.post('/invitation', authenticatestaff, function (req, res) {
     tls: { rejectUnauthorized: false }
   });
   // setup e-mail data with unicode symbols
-  var mailOptions = {
 
+  var mailOptions = {
     from: "maharishi universty ✔ <selina.tesfabrhan1@gmail.com>",
     to: req.body.email,
     subject: "take exam",
     text: "maharishi ",
-    html: `<b>click button to take exam</b><br><a href="http://localhost:4200/exam"><button>Take Exam</button></a>`
+    html: `<b>click button to take exam</b><br><a href="http://localhost:4200/start/?tok=${token}"><button>Take Exam</button></a>`
   }
   // send mail with defined transport object
   smtpTransport.sendMail(mailOptions, async function (error, response) {
@@ -166,16 +164,10 @@ app.post('/sendemail', authenticatestaff, function (req, res) {
 });
 //:1 create question
 app.post('/admin/create/question', check_token, async (req, res) => {
-<<<<<<< HEAD
   const q = { question: req.body.question, status: 'active' }
+
   req.db.collection('exam').updateOne({}, { $addToSet: { questions: q } })
   res.json({ success: true })
-=======
-  const q = {question: req.body.question, status: 'active'}
-
-  req.db.collection('exam').updateOne({}, {$addToSet: {questions: q}})
-  res.json({success: true})
->>>>>>> dc62b4b86ef9641dc354cbc4196546f17b29b05e
 })
 //:1 question list
 app.get('/admin/questions/', check_token, async (req, res) => {
@@ -210,11 +202,7 @@ app.post('/admin/create/staff', check_token, async (req, res) => {
 app.get('/admin/staffs/', check_token, async (req, res) => {
   let result = []
   const pointer = await req.db.collection('user')
-<<<<<<< HEAD
     .find({ type: { $ne: 'admin' } }).project({ password: 0 })
-=======
-    .find({type: {$ne: 'admin'}}).project({password: 0})
->>>>>>> dc62b4b86ef9641dc354cbc4196546f17b29b05e
     .forEach((data) => result.push(data))
 
   res.json({ success: true, data: result })
@@ -226,18 +214,18 @@ app.patch('/admin/staffs/', check_token, async (req, res) => {
   const type = req.body.type
   console.log(req.body)
   await req.db.collection('user').updateOne(
-    {name: name},
-    {$set: {type: type}}
+    { name: name },
+    { $set: { type: type } }
   )
 
-  res.json({success: true})
+  res.json({ success: true })
 })
 
 //:1 staff delete
-app.delete('/admin/staffs/' , check_token, async (req, res) => {
+app.delete('/admin/staffs/', check_token, async (req, res) => {
   console.log(req.body)
-  await req.db.collection('user').remove({name: req.body.name})
-  res.json({success: true})
+  await req.db.collection('user').remove({ name: req.body.name })
+  res.json({ success: true })
 })
 
 //:1 error
