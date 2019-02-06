@@ -1,6 +1,7 @@
 # cs572-project
 
-#exam object
+### Exam Object
+```json
 {
 	"questions": [{
 		"question": "",
@@ -24,3 +25,4 @@
     "password": "",
     "type": ""
 }
+```
