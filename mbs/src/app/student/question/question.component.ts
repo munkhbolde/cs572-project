@@ -9,7 +9,7 @@ import { AceEditorComponent } from 'ng2-ace-editor';
   styleUrls: ["./question.component.css"]
 })
 export class QuestionComponent implements OnInit {
-  @ViewChild('editor') editor;
+  @ViewChild("editor") editor;
   @Input() q;
   @Input() number;
 
@@ -29,14 +29,12 @@ export class QuestionComponent implements OnInit {
     timeSpent: 0,
     snapshot: []
   }];
-
   private snapshot: string[] = [];
   private code: string = "";
 
   constructor() { }
 
   ngOnInit() {
-    console.log(this.editor);
     if (this.q == null) {
       this.q = this.exam[0].question;
       this.number = 1;
@@ -45,10 +43,17 @@ export class QuestionComponent implements OnInit {
 
   ngAfterViewInit() { }
 
-  onChange(code: string, id) {
-    console.log(code);
-    this.snapshot.push(code);
-    this.code = code;
+  onChange(code: string) {
+    let ssLen = this.exam[this.number - 1].snapshot.length;
+    if (ssLen > 0) {
+      if (this.exam[this.number - 1].snapshot[ssLen - 1] != code) {
+        this.snapshot.push(code);
+        console.log(code);
+      }
+    } else {
+      this.code = code;
+      console.log(code);
+    }
   }
 
   submitAnswer() {
@@ -64,22 +69,22 @@ export class QuestionComponent implements OnInit {
   nextQuestion() {
     //TODO: disble next button when question 3 is showing
     this.exam[this.number - 1].answer = this.code;
-    this.exam[this.number - 1].snapshot = this.snapshot;
-    this.code = "";
-    this.snapshot = [];
-    this.q = this.exam[this.number].question;
-    this.editor.setText(this.exam[this.number].answer);
-    this.number = this.number + 1;
+    this.exam[this.number - 1].snapshot.concat(this.snapshot);
+    this.exam[this.number - 1].timeSpent = 0;// TODO insert timer value
+    this.number += 1;
+    this.q = this.exam[this.number - 1].question;
+    this.editor.setText(this.exam[this.number - 1].answer);
+    this.snapshot = this.exam[this.number - 1].snapshot;
   }
 
   prevQuestion() {
     //TODO: disble prev button when question 1 is showing
     this.exam[this.number - 1].answer = this.code;
-    this.exam[this.number - 1].snapshot = this.snapshot;
-    this.code = "";
-    this.snapshot = [];
+    this.exam[this.number - 1].snapshot.concat(this.snapshot);
+    this.exam[this.number - 1].timeSpent = 0;// TODO insert timer value
+    this.number -= 1;
     this.q = this.exam[this.number - 1].question;
     this.editor.setText(this.exam[this.number - 1].answer);
-    this.number--;
+    this.snapshot = this.exam[this.number - 1].snapshot;
   }
 }

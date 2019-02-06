@@ -59,7 +59,8 @@ app.post('/login/', async (req, res) => {
   }
   res.json({ success: false })
 })
-// check token 
+
+// check token
 authenticatestaff = function (req, res, next) {
   debugger
 
@@ -165,9 +166,16 @@ app.post('/sendemail', authenticatestaff, function (req, res) {
 });
 //:1 create question
 app.post('/admin/create/question', check_token, async (req, res) => {
+<<<<<<< HEAD
   const q = { question: req.body.question, status: 'active' }
   req.db.collection('exam').updateOne({}, { $addToSet: { questions: q } })
   res.json({ success: true })
+=======
+  const q = {question: req.body.question, status: 'active'}
+
+  req.db.collection('exam').updateOne({}, {$addToSet: {questions: q}})
+  res.json({success: true})
+>>>>>>> dc62b4b86ef9641dc354cbc4196546f17b29b05e
 })
 //:1 question list
 app.get('/admin/questions/', check_token, async (req, res) => {
@@ -202,10 +210,34 @@ app.post('/admin/create/staff', check_token, async (req, res) => {
 app.get('/admin/staffs/', check_token, async (req, res) => {
   let result = []
   const pointer = await req.db.collection('user')
+<<<<<<< HEAD
     .find({ type: { $ne: 'admin' } }).project({ password: 0 })
+=======
+    .find({type: {$ne: 'admin'}}).project({password: 0})
+>>>>>>> dc62b4b86ef9641dc354cbc4196546f17b29b05e
     .forEach((data) => result.push(data))
 
   res.json({ success: true, data: result })
+})
+
+//:1 staff edit
+app.patch('/admin/staffs/', check_token, async (req, res) => {
+  const name = req.body.name
+  const type = req.body.type
+  console.log(req.body)
+  await req.db.collection('user').updateOne(
+    {name: name},
+    {$set: {type: type}}
+  )
+
+  res.json({success: true})
+})
+
+//:1 staff delete
+app.delete('/admin/staffs/' , check_token, async (req, res) => {
+  console.log(req.body)
+  await req.db.collection('user').remove({name: req.body.name})
+  res.json({success: true})
 })
 
 //:1 error
