@@ -226,18 +226,18 @@ app.patch('/admin/staffs/', check_token, async (req, res) => {
   const type = req.body.type
   console.log(req.body)
   await req.db.collection('user').updateOne(
-    {name: name},
-    {$set: {type: type}}
+    { name: name },
+    { $set: { type: type } }
   )
 
-  res.json({success: true})
+  res.json({ success: true })
 })
 
 //:1 staff delete
-app.delete('/admin/staffs/' , check_token, async (req, res) => {
+app.delete('/admin/staffs/', check_token, async (req, res) => {
   console.log(req.body)
-  await req.db.collection('user').remove({name: req.body.name})
-  res.json({success: true})
+  await req.db.collection('user').remove({ name: req.body.name })
+  res.json({ success: true })
 })
 
 //:1 error
