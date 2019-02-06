@@ -9,10 +9,12 @@ import { CreateStaff } from './admin/create-staff'
 import { CreateQuestion } from './admin/create-question'
 import { QuestionList } from './admin/question-list'
 import { StaffList } from './admin/staff-list'
+import { StartExamComponent } from './student/start-exam/start-exam.component';
 
 const routes: Routes = [
   { path: 'login', component: AdminLogin },
   { path: 'exam', component: QuestionComponent },
+  { path: 'start', component: StartExamComponent },
   { path: 'admin/create/staff', component: CreateStaff },
   { path: 'admin/create/question', component: CreateQuestion },
   { path: 'admin/questions', component: QuestionList },

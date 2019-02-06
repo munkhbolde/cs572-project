@@ -21,6 +21,7 @@ import { StaffList } from './admin/staff-list'
 
 // Used for staff
 import { StaffcompComponent } from './staffcomp/staffcomp.component';
+import { StartExamComponent } from './student/start-exam/start-exam.component';
 
 
 @NgModule({
@@ -33,6 +34,7 @@ import { StaffcompComponent } from './staffcomp/staffcomp.component';
 		QuestionList,
 		StaffcompComponent,
 		StaffList,
+		StartExamComponent,
 	],
 	imports: [
 		BrowserModule,
