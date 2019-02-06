@@ -22,21 +22,31 @@ compare = function (plain, hash) {
   return bcrypt.compareSync(plain, hash)
 }
 //:1 middlewares
+app.set('view engine', 'jade')
+
 app.use(parser.json())
 app.use(cors())
 app.use(express.static(__dirname + "/templates/static/css/"))
+
 app.use((req, res, next) => {
   req.db = db
   next()
 })
+
 check_token = function (req, res, next) {
   if (!req.headers.authorization) {
-    res.render('403', { status: 403, url: req.url })
+    res.status(401)
+    res.json({ status: 401, url: req.url })
+    return
   }
+
   const token = req.headers.authorization.split(' ')[1]
   jwt.verify(token, 'secret', function (err, decoded) {
-    if (decoded.type !== 'admin')
-      res.render('403', { status: 403, url: req.url })
+    if (err || decoded.type !== 'admin') {
+      res.status(401)
+      res.json({ status: 401, url: req.url })
+      return
+    }
   })
   next()
 }
