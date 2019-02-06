@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core'
 import { Routes, RouterModule } from '@angular/router'
 import { StaffcompComponent } from './staffcomp/staffcomp.component';
 import { QuestionComponent } from './student/question/question.component'
+import { AuthGuard } from './services/auth-guard'
 
 // Used for admin
 import { AdminLogin } from './admin/login'
@@ -14,12 +15,13 @@ import { StartExamComponent } from './student/start-exam/start-exam.component';
 const routes: Routes = [
   { path: 'login', component: AdminLogin },
   { path: 'exam', component: QuestionComponent },
+	{ path: 'admin/create/staff', component: CreateStaff, canActivate: [AuthGuard] },
+	{ path: 'admin/create/question', component: CreateQuestion, canActivate: [AuthGuard] },
+	{ path: 'admin/questions', component: QuestionList, canActivate: [AuthGuard] },
+	{ path: 'admin/staffs', component: StaffList, canActivate: [AuthGuard] },
+	{ path: 'staff', component: StaffcompComponent, canActivate: [AuthGuard] },
   { path: 'start', component: StartExamComponent },
-  { path: 'admin/create/staff', component: CreateStaff },
-  { path: 'admin/create/question', component: CreateQuestion },
-  { path: 'admin/questions', component: QuestionList },
-  { path: 'admin/staffs', component: StaffList },
-  { path: 'staff', component: StaffcompComponent }
+	{ path: '**', redirectTo: 'login'},
 ]
 
 @NgModule({

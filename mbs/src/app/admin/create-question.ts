@@ -29,7 +29,7 @@ export class CreateQuestion {
 	questionForm: FormGroup
 	url = 'http://localhost:8080/admin/create/question'
 
-	constructor(private formBuilder: FormBuilder, private http: HttpClient){
+	constructor(private formBuilder: FormBuilder, private http: HttpClient) {
 		this.questionForm = formBuilder.group({
 			question: ['', Validators.required]
 		})
@@ -39,6 +39,7 @@ export class CreateQuestion {
 		const data = {
 			question: this.questionForm.controls.question.value
 		}
+
 		this.http.post(this.url, data).subscribe((res) => {
 			console.log(res)
 		})

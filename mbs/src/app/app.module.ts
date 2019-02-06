@@ -7,6 +7,7 @@ import { AppComponent } from './app.component'
 import { ReactiveFormsModule } from '@angular/forms'
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http'
 import { Interceptor } from './services/interceptor'
+import { ErrorInterceptor } from './services/error-interceptor'
 
 // Used for Exam
 import { QuestionComponent } from './student/question/question.component'
@@ -45,7 +46,10 @@ import { StartExamComponent } from './student/start-exam/start-exam.component';
 		HttpClientModule,
 		AceEditorModule
 	],
-	providers: [{ provide: HTTP_INTERCEPTORS, useClass: Interceptor, multi: true }],
+	providers: [
+		{ provide: HTTP_INTERCEPTORS, useClass: Interceptor, multi: true },
+		{ provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
+	],
 	bootstrap: [AppComponent]
 })
 export class AppModule { }
