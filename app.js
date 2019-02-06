@@ -176,16 +176,10 @@ app.post('/sendemail', authenticatestaff, function (req, res) {
 });
 //:1 create question
 app.post('/admin/create/question', check_token, async (req, res) => {
-<<<<<<< HEAD
   const q = { question: req.body.question, status: 'active' }
+
   req.db.collection('exam').updateOne({}, { $addToSet: { questions: q } })
   res.json({ success: true })
-=======
-  const q = {question: req.body.question, status: 'active'}
-
-  req.db.collection('exam').updateOne({}, {$addToSet: {questions: q}})
-  res.json({success: true})
->>>>>>> dc62b4b86ef9641dc354cbc4196546f17b29b05e
 })
 //:1 question list
 app.get('/admin/questions/', check_token, async (req, res) => {
