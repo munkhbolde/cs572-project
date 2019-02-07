@@ -93,6 +93,14 @@ router.post('/answer', check_token, async (req, res) => {
   console.log(result)
   res.json({succes: true, data: result})
 })
+
+router.patch('/answer', check_token, async (req, res) => {
+  const email = req.body.email
+  const grade = req.body.grade
+  let result = []
+  const pointer = await req.db.collection('exam').updateOne({ 'students.email': email }, { $set: { 'students.$.status': grade } })
+  res.json({success: true})
+})
 // endfold
 
 module.exports = router
