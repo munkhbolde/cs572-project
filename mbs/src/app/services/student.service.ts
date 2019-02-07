@@ -8,7 +8,7 @@ export class StudentService {
   constructor(private http: HttpClient) { }
 
   submitAnswer(exam, email) {
-    return this.http.post<any>(this.submitUrl, { "question": exam.question, "answer": exam.answer, "snapshot": exam.snapshot, "timeSpent": exam.timeSpent, email: email });
+    return this.http.post<any>(this.submitUrl, { exam: exam, email: email });
   }
 
 }

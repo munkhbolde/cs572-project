@@ -191,7 +191,7 @@ app.get('/start', student_token, async (req, res) => {
   const pointer = await req.db.collection('exam')
     .find({
       "questions.status": "enabled"
-      }, {
+    }, {
         "_id": 0, "questions.question": 1
       }).forEach((data) => result = data)
 
@@ -200,18 +200,12 @@ app.get('/start', student_token, async (req, res) => {
 
 //submit answers
 app.post("/submit", function (req, res) {
-  const examData = {
-    "question": req.body.question,
-    "answer": req.body.answer,
-    "snapshot": req.body.snapshot,
-    "timeSpent": req.body.timeSpent
-  }
-
-  console.log(req.body);
-
+  const _examData = req.body.exam;
+  console.log(_examData);
   req.db.collection('exam').updateOne(
     { "students.email": req.body.email },
-    { $addToSet: { answer: examData } })
+    { $set: { "students.$.answer": _examData, "students.$.status": "submitted" } },
+    { upsert: true })
   res.json({ success: true })
 });
 
