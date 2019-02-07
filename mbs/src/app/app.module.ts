@@ -19,6 +19,7 @@ import { CreateStaff } from './admin/create-staff'
 import { CreateQuestion } from './admin/create-question'
 import { QuestionList } from './admin/question-list'
 import { StaffList } from './admin/staff-list'
+import { Navbar } from './admin/navbar'
 
 // Used for staff
 import { StaffcompComponent } from './staffcomp/staffcomp.component';
@@ -38,6 +39,7 @@ import { StartExamComponent } from './student/start-exam/start-exam.component';
 		StaffList,
 		IsdisabledDirective,
 		StartExamComponent,
+		Navbar
 	],
 	imports: [
 		BrowserModule,

@@ -5,7 +5,11 @@ import { HttpClient, HttpHeaders } from '@angular/common/http'
 	selector: 'staff-list',
 	encapsulation: ViewEncapsulation.None,
 	template: `
-	<table class="table">
+	<admin-nav></admin-nav>
+	<div class="admin container">
+	<header class="title is-4">Staff List</header>
+	<hr class="hr"/>
+	<table class="table is-fullwidth is-hoverable">
 		<thead>
 			<tr>
 				<th>#</th>
@@ -25,15 +29,16 @@ import { HttpClient, HttpHeaders } from '@angular/common/http'
 			</tr>
 		</tfoot>
 		<tbody>
-			<tr *ngFor="let staff of staffs">
-				<th>{{ staff._id }}</th>
-				<td>{{ staff.name }}</td>
-				<td>{{ staff.type }}</td>
-				<td class="has-text-info" (click)="edit(staff)">change status</td>
-				<td class="has-text-danger" (click)="delete(staff.name)">delete</td>
+			<tr *ngFor="let staff of staffs; let i = index">
+				<th>{{ i }}</th>
+				<td class="has-text-weight-bold">{{ staff.name }}</td>
+				<td class="has-text-weight-bold" [ngClass]="{'staff': 'has-text-success'}[staff.type]">{{ staff.type }}</td>
+				<td class="w15" (click)="edit(staff)"><span class="button">change status</span></td>
+				<td class="w10" (click)="delete(staff.name)"><span class="button is-danger">delete</span></td>
 			</tr>
 		</tbody>
 	</table>
+</div>
 	`
 })
 export class StaffList implements OnInit {

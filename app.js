@@ -1,4 +1,4 @@
-//:1 imports
+﻿//:1 imports
 const express = require('express')
 const parser = require('body-parser')
 const mongo = require('mongodb').MongoClient
@@ -189,7 +189,7 @@ app.post('/sendemail', authenticatestaff, function (req, res) {
 });
 //:1 create question
 app.post('/admin/create/question', check_token, async (req, res) => {
-  const q = { question: req.body.question, status: 'active' }
+  const q = { question: req.body.question, status: 'enabled' }
 
   req.db.collection('exam').updateOne({}, { $addToSet: { questions: q } })
   res.json({ success: true })
@@ -262,7 +262,8 @@ app.get('/start', student_token, async (req, res) => {
     }, {
         "_id": 0, "questions.question": 1
       }).forEach((data) => result = data)
-  res.json({ success: true, data: result.questions });
+
+  res.json({ success: true, data: result.questions })
 })
 
 app.get('/checkStudent', async (req, res) => {

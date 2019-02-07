@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { StaffserviceService } from '../staffservice.service';
 import { promise } from 'protractor';
 import { observable, Observable } from 'rxjs';
+import { Router } from '@angular/router'
 
 @Component({
   selector: 'app-staffcomp',
@@ -11,7 +12,7 @@ import { observable, Observable } from 'rxjs';
 export class StaffcompComponent implements OnInit {
   studentinfo = []
   staffresponse;
-  constructor(private stafservice: StaffserviceService) {
+  constructor(private stafservice: StaffserviceService, private router: Router) {
     this.stafservice.getstudentinfo().subscribe(
       (data) => {
         data.forEach(element => {
@@ -26,22 +27,31 @@ export class StaffcompComponent implements OnInit {
   ngOnInit() {
 
   }
-  sendinvitation(email) {
-
-    this.stafservice.sendinvitation(email)
-      .subscribe((d) => this.staffresponse = d
-        , (err) => console.log(err))
-  }
-  sendemail(email, state) {
-    console.log(email + state)
-    if (state === "pass" || state === "fail") {
-      this.stafservice.sendemail(email, state)
-        .subscribe((d) => this.staffresponse = d
+  sendinvitation(email, state) {
+    console.log(state)
+    if (state === "") {
+      console.log(state)
+      this.stafservice.sendinvitation(email)
+        .subscribe((d) => this.staffresponse = "invitation sent"
           , (err) => console.log(err))
     }
     else {
-      console.log('result didnot come can not send email')
+      this.staffresponse = "message has already been sent before"
+    }
+  }
+  sendemail(email, state) {
+    if (state === "pass" || state === "fail") {
+      this.stafservice.sendemail(email, state)
+        .subscribe((d) => this.staffresponse = "result sent to student"
+          , (err) => console.log(err))
+    }
+    else {
+      this.staffresponse = 'result didnot come can not send email'
     }
   }
 
+	logout() {
+		localStorage.clear()
+		this.router.navigate(['/login'])
+	}
 }

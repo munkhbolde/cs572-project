@@ -12,18 +12,23 @@ import {
 	selector: 'create-question',
 	encapsulation: ViewEncapsulation.None,
 	template: `
-	<form [formGroup]='questionForm' (ngSubmit)="onSubmit()">
-		<div class="field">
-			<textarea class="input is-primary"
-				placeholder="What do you want to ask?"
-				formControlName="question">
-			</textarea>
+	<admin-nav></admin-nav>
+	<div class="admin container">
+		<header class="title is-4">Create question</header>
+		<hr class="hr"/>
+		<form [formGroup]='questionForm' (ngSubmit)="onSubmit()">
+			<div class="field">
+				<textarea class="input is-info"
+					placeholder="What do you want to ask?"
+					formControlName="question">
+				</textarea>
+			</div>
+			<div class="field">
+				<input class="button is-info" type="submit" value="create">
+				</div>
+			</form>
 		</div>
-		<div class="field">
-			<input class="button is-primary" type="submit" value="create">
-		</div>
-	</form>
-	`
+		`
 })
 export class CreateQuestion {
 	title = 'Create new Question'
