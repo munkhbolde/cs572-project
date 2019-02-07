@@ -16,6 +16,11 @@ export class StartExamComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit() {
+    const checkStudent = this.checkStudent();
+    console.log("check student ", checkStudent);
+    if (!checkStudent) {
+      this.router.navigate(['/login']);
+    }
     this.httpClient.get(this.url).subscribe((res: any) => {
       this.transfer.setData(res);
       console.log(res);
@@ -24,6 +29,21 @@ export class StartExamComponent implements OnInit {
 
   loadData() {
 
+  }
+
+  async checkStudent() {
+    console.log("check student is working");
+    let url = "http://localhost:8080/checkStudent" + location.search;
+    let resp = false;
+    await this.httpClient.get(url).subscribe((res: any) => {
+      console.log("success:", res.success);
+      if (res.success) {
+        console.log(res.success);
+        return resp = true;
+      }
+    });
+    console.log(resp);
+    return resp;
   }
 
   startExam() {

@@ -23,9 +23,6 @@ export class AuthGuard implements CanActivate {
 			case "login":
 				return true;
 				break;
-			case "start":
-				return this.checkStudent()
-				break;
 			default:
 				return true;
 		}
@@ -36,17 +33,4 @@ export class AuthGuard implements CanActivate {
 		return false
 	}
 
-	checkStudent() {
-		console.log("check student is working");
-		let url = "http://localhost:8080/checkStudent" + location.search;
-		let resp = false;
-		this.http.get(url).subscribe((res: any) => {
-			console.log("success:", res.success);
-			if (res.success) {
-				console.log(res.success);
-				return resp = true;
-			}
-		});
-		return resp;
-	}
 }
