@@ -1,5 +1,6 @@
 import { Component, ViewEncapsulation } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
+import { Router } from '@angular/router'
 import {
 	FormGroup,
 	FormControl,
@@ -42,7 +43,7 @@ export class CreateStaff {
 	url = 'http://localhost:8080/admin/create/staff'
 	staffForm: FormGroup
 
-	constructor(private formBuilder: FormBuilder, private http: HttpClient) {
+	constructor(private formBuilder: FormBuilder, private http: HttpClient, private router: Router) {
 		this.staffForm = formBuilder.group({
 			name: ['', Validators.required],
 			password: ['', Validators.required],
@@ -56,7 +57,7 @@ export class CreateStaff {
 		}
 
 		this.http.post(this.url, form).subscribe((data:any) => {
-			console.log(data)
+			this.router.navigate(['/admin/staffs'])
 		})
 	}
 }

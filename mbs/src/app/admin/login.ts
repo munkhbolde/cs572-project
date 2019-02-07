@@ -1,5 +1,6 @@
 import { Component, ViewEncapsulation } from '@angular/core'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
+import { Router } from '@angular/router'
 import { Observable } from 'rxjs'
 import {
   FormGroup,
@@ -38,8 +39,9 @@ import {
 export class AdminLogin {
   title = 'login'
   loginForm: FormGroup
+	error = ''
 
-  constructor(private formBuilder: FormBuilder, private http: HttpClient) {
+  constructor(private formBuilder: FormBuilder, private http: HttpClient, private router: Router) {
     this.loginForm = formBuilder.group({
       uname: ['', Validators.required],
       password: ['', Validators.required]
@@ -54,8 +56,16 @@ export class AdminLogin {
 
     this.http.post('http://localhost:8080/login/', form).subscribe((data:any) => {
 			localStorage.clear()
-			if (data.success)
-				localStorage['token'] = data.token
+			if (data.success === false) {
+				this.error = "user name password mismatch"
+				return
+			}
+
+			localStorage['token'] = data.token
+			const encrypted = data.token.split('.')[1]
+			const decoded = JSON.parse(atob(encrypted))
+			const url = '/' + decoded.type
+			this.router.navigate([url])
     })
   }
 }

@@ -48,7 +48,7 @@ import { StartExamComponent } from './student/start-exam/start-exam.component';
 	],
 	providers: [
 		{ provide: HTTP_INTERCEPTORS, useClass: Interceptor, multi: true },
-		{ provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
+		{ provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
 	],
 	bootstrap: [AppComponent]
 })

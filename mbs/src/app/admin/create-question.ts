@@ -1,5 +1,6 @@
 import { Component, ViewEncapsulation } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
+import { Router } from '@angular/router'
 import {
 	FormGroup,
 	FormControl,
@@ -29,7 +30,7 @@ export class CreateQuestion {
 	questionForm: FormGroup
 	url = 'http://localhost:8080/admin/create/question'
 
-	constructor(private formBuilder: FormBuilder, private http: HttpClient) {
+	constructor(private formBuilder: FormBuilder, private http: HttpClient, private router: Router) {
 		this.questionForm = formBuilder.group({
 			question: ['', Validators.required]
 		})
@@ -41,7 +42,7 @@ export class CreateQuestion {
 		}
 
 		this.http.post(this.url, data).subscribe((res) => {
-			console.log(res)
+			this.router.navigate(['/admin/questions'])
 		})
 	}
 }

@@ -3,6 +3,8 @@ import "ace-builds/webpack-resolver";
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { edit, Editor } from 'brace';
 import { AceEditorComponent } from 'ng2-ace-editor';
+import { TransferDataService } from '../../services/transfer-data.service'
+
 @Component({
   selector: "app-question",
   templateUrl: "./question.component.html",
@@ -13,6 +15,8 @@ export class QuestionComponent implements OnInit {
   @Input() q;
   @Input() number;
 
+  private snapshot: string[] = [];
+  private code: string = "";
   private exam = [{
     question: "What is an array",
     answer: "",
@@ -29,12 +33,16 @@ export class QuestionComponent implements OnInit {
     timeSpent: 0,
     snapshot: []
   }];
-  private snapshot: string[] = [];
-  private code: string = "";
 
-  constructor() { }
+  constructor(private transfer: TransferDataService) { }
+  data = this.transfer.getData();
 
   ngOnInit() {
+    if (this.data) {
+      console.log(this.data);
+    } else {
+      console.log("No data");
+    }
     if (this.q == null) {
       this.q = this.exam[0].question;
       this.number = 1;

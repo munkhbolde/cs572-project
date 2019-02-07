@@ -1,26 +1,30 @@
 # cs572-project
 
-#exam object
+### Exam Object
+```json
 {
-	"questions": [{
-		"question": "",
-		"status": ""
-	}],
-	"students": [{
-		"name": "",
-		"email": "",
-		"answer": {
-			"question": "",
-			"answer": "",
-			"snapshots": []
-		},
-		"status": ""
-	}]
+  "questions": [{
+    "question": "",
+      "status": ""
+  }],
+    "students": [{
+      "name": "",
+      "email": "",
+      "answer": {
+        "question": "",
+        "answer": "",
+        "snapshots": []
+      },
+      "status": ""
+    }]
 }
 
-#user object
+```
+### User object
+```json
 {
-    "name": "",
-    "password": "",
-    "type": ""
+  "name": "",
+  "password": "",
+  "type": ""
 }
+```
