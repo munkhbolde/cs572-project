@@ -27,6 +27,7 @@ import { Answer } from './admin/answer'
 import { StaffcompComponent } from './staffcomp/staffcomp.component';
 import { IsdisabledDirective } from './staffcomp/isdisabled.directive';
 import { StartExamComponent } from './student/start-exam/start-exam.component';
+import { DoneComponent } from './student/done/done.component';
 
 
 @NgModule({
@@ -44,6 +45,7 @@ import { StartExamComponent } from './student/start-exam/start-exam.component';
 		Navbar,
 		Report,
 		Answer,
+		DoneComponent,
 	],
 	imports: [
 		BrowserModule,

@@ -13,6 +13,7 @@ import { QuestionList } from './admin/question-list'
 import { StaffList } from './admin/staff-list'
 import { Report } from './admin/report'
 import { Answer } from './admin/answer'
+import { DoneComponent } from './student/done/done.component';
 
 const routes: Routes = [
 	{ path: 'exam', component: QuestionComponent },
@@ -26,6 +27,7 @@ const routes: Routes = [
 	{ path: 'admin/report', component: Report, canActivate: [AuthGuard] },
 	{ path: 'staff', component: StaffcompComponent, canActivate: [AuthGuard] },
 	{ path: 'start', component: StartExamComponent },
+	{ path: 'done', component: DoneComponent },
 	{ path: '**', redirectTo: 'login' },
 ]
 

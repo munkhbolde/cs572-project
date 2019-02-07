@@ -43,13 +43,11 @@ export class QuestionComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit() {
-    if (this.exam[0].question == "") {
-      const questions = JSON.parse(localStorage.getItem("examQuestions"));
-      for (let i = 0; i < questions.length; i++) {
-        this.exam[i].question = questions[i].question;
-        console.log(`1: `, questions[i]);
-      }
+    const questions = JSON.parse(localStorage.getItem("examQuestions"));
+    for (let i = 0; i < questions.length; i++) {
+      this.exam[i].question = questions[i].question;
     }
+
     if (this.q == null) {
       this.q = this.exam[0].question;
       this.number = 1;
@@ -68,7 +66,7 @@ export class QuestionComponent implements OnInit {
     console.log("exam:", this.exam);
     this.studentService.submitAnswer(this.exam, this.studentEmail).subscribe((res) => {
       if (res.success) {
-        this.router.navigate(['/login']);
+        this.router.navigate(['/done']);
       }
     }, err => {
       console.log(err);
