@@ -159,6 +159,12 @@ app.post('/sendemail', authenticatestaff, function (req, res) {
 app.get('/checkStudent', async (req, res) => {
   let token = req.query.tok;
   let result = [];
+
+  const newToken = jwt.sign({
+    email: req.body.email
+  }, 'secret', { expiresIn: '2h' });
+  res.header('Authorizatin', `Bearer ${newToken}`)
+
   jwt.verify(token, 'secret', function (err, decoded) {
     if (err) {
       console.log(err);
@@ -171,7 +177,7 @@ app.get('/checkStudent', async (req, res) => {
         result = data;
       });
     if (result.length > 0)
-      res.json({ success: true });
+      res.json({ success: true, email: decoded.email, token: newToken });
     else
       res.json({ success: false });
   });
@@ -180,6 +186,7 @@ app.get('/checkStudent', async (req, res) => {
 
 //get questions for exam
 app.get('/start', student_token, async (req, res) => {
+
   let result = [];
   const pointer = await req.db.collection('exam')
     .find({
@@ -191,6 +198,22 @@ app.get('/start', student_token, async (req, res) => {
   res.json({ success: true, data: result.questions })
 })
 
+//submit answers
+app.post("/submit", function (req, res) {
+  const examData = {
+    "question": req.body.question,
+    "answer": req.body.answer,
+    "snapshot": req.body.snapshot,
+    "timeSpent": req.body.timeSpent
+  }
+
+  console.log(req.body);
+
+  req.db.collection('exam').updateOne(
+    { "students.email": req.body.email },
+    { $addToSet: { answer: examData } })
+  res.json({ success: true })
+});
 
 //:1 error
 app.use(function (error, req, res, next) {
