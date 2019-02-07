@@ -8,7 +8,7 @@ const nodemailer = require('nodemailer')
 const bcrypt = require('bcrypt');
 const config = require('./dotenv')
 const admin = require('./admin')
-const middleware =  require('./middlewares')
+const middleware = require('./middlewares')
 
 //:1 helper
 let db
@@ -176,6 +176,21 @@ app.get('/checkStudent', async (req, res) => {
       res.json({ success: false });
   });
 });
+
+
+//get questions for exam
+app.get('/start', student_token, async (req, res) => {
+  let result = [];
+  const pointer = await req.db.collection('exam')
+    .find({
+      "questions.status": "enabled"
+    }, {
+        "_id": 0, "questions.question": 1
+      }).forEach((data) => result = data)
+
+  res.json({ success: true, data: result.questions })
+})
+
 
 //:1 error
 app.use(function (error, req, res, next) {
