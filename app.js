@@ -112,7 +112,7 @@ app.post('/invitation', authenticatestaff, function (req, res) {
 
   const token = jwt.sign({
     email: req.body.email
-  }, 'secret', { expiresIn: '2h' });
+  }, 'secret', { expiresIn: '24h' });
   res.header('Authorizatin', `Bearer ${token}`)
 
   // will take email from req.email
@@ -269,8 +269,18 @@ app.get('/checkStudent', async (req, res) => {
   let token = req.query.tok;
   let result = [];
   jwt.verify(token, 'secret', function (err, decoded) {
-    req.db.collection('exam').find({ "students.email": { $eq: decoded.email } })
-      .forEach((data) => result = data);
+    if (err) {
+      console.log(err);
+      return;
+    }
+    req.db.collection('exam').find(
+      { "students.email": { $eq: decoded.email } },
+      { "_id": 0, "students.email": 1 })
+      .forEach((data) => {
+        console.log(data);
+        result = data;
+      });
+    console.log(result, decoded.email);
     if (result.length > 0)
       res.json({ success: true });
     else

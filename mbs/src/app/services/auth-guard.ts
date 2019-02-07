@@ -17,17 +17,18 @@ export class AuthGuard implements CanActivate {
 
 		const encrypted = localStorage['token'].split('.')[1]
 		this.decoded = JSON.parse(atob(encrypted))
+		console.log(this.role);
 
-		if (this.role === 'login')
-			return true;
-
-		if (this.decoded.type !== this.role)
-			return this.navigate();
-
-		// if (this.role === 'start')
-		// 	return this.checkStudent()
-
-		return true;
+		switch (this.role) {
+			case "login":
+				return true;
+				break;
+			case "start":
+				return this.checkStudent()
+				break;
+			default:
+				return true;
+		}
 	}
 
 	navigate() {
@@ -36,9 +37,11 @@ export class AuthGuard implements CanActivate {
 	}
 
 	checkStudent() {
+		console.log("check student is working");
 		let url = "http://localhost:8080/checkStudent" + location.search;
 		let resp = false;
 		this.http.get(url).subscribe((res: any) => {
+			console.log("success:", res.success);
 			if (res.success) {
 				console.log(res.success);
 				return resp = true;
