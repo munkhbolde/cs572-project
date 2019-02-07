@@ -191,12 +191,15 @@ app.get('/checkStudent', (req, res) => {
 app.get('/start', student_token, async (req, res) => {
 
   let result = [];
-  const pointer = await req.db.collection('exam')
-    .find({
-      "questions.status": "enabled"
-    }, {
-        "_id": 0, "questions.question": 1
-      }).forEach((data) => result = data)
+  const pointer = await req.db.collection('exam').aggregate([
+    { $match: { "questions.status": "enabled" } },
+    { $project: { _id: 0, "questions.question": 1 } },
+    { $sample: { size: 3 } }
+  ])
+    .forEach((data) => {
+      console.log("198:", data);
+      result = data
+    })
 
   res.json({ success: true, data: result.questions })
 })
