@@ -156,7 +156,7 @@ app.post('/sendemail', authenticatestaff, function (req, res) {
 });
 
 //:1 checkStudent
-app.get('/checkStudent', async (req, res) => {
+app.get('/checkStudent', (req, res) => {
   let token = req.query.tok;
   let result = [];
 
@@ -170,16 +170,19 @@ app.get('/checkStudent', async (req, res) => {
       console.log(err);
       return;
     }
-    req.db.collection('exam').find(
-      { "students.email": { $eq: decoded.email } },
-      { "_id": 0, "students.email": 1 })
+    req.db.collection('exam').aggregate([
+      { $match: { "students.email": decoded.email } },
+      { $project: { _id: 0, "students.email": 1 } }
+    ])
       .forEach((data) => {
         result = data;
+        console.log("178:", result.students.length);
+        if (result.students.length > 0)
+          res.json({ success: true, email: decoded.email, token: newToken });
+        else
+          res.json({ success: false });
       });
-    if (result.length > 0)
-      res.json({ success: true, email: decoded.email, token: newToken });
-    else
-      res.json({ success: false });
+
   });
 });
 
