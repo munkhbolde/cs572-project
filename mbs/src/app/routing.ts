@@ -21,7 +21,7 @@ const routes: Routes = [
 	{ path: 'admin/questions', component: QuestionList, canActivate: [AuthGuard] },
 	{ path: 'admin/staffs', component: StaffList, canActivate: [AuthGuard] },
 	{ path: 'staff', component: StaffcompComponent, canActivate: [AuthGuard] },
-	{ path: 'start', component: StartExamComponent },
+	{ path: 'start/', component: StartExamComponent, canActivate: [AuthGuard] },
 	{ path: '**', redirectTo: 'login' },
 ]
 

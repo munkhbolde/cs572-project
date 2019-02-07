@@ -52,12 +52,13 @@ check_token = function (req, res, next) {
 }
 
 student_token = function (req, res, next) {
+  console.log(req.headers.authorization);
   if (!req.headers.authorization) {
     res.status(401);
     res.json({ status: 401, url: req.url });
     return;
   }
-  next()
+  next();
 }
 
 //:1 login
@@ -254,15 +255,28 @@ app.delete('/admin/staffs/', check_token, async (req, res) => {
 
 //get questions for exam
 app.get('/start', student_token, async (req, res) => {
-  let result = []
+  let result = [];
   const pointer = await req.db.collection('exam')
     .find({
       "questions.status": "enabled"
     }, {
         "_id": 0, "questions.question": 1
       }).forEach((data) => result = data)
-  res.json({ success: true, data: result.questions })
+  res.json({ success: true, data: result.questions });
 })
+
+app.get('/checkStudent', async (req, res) => {
+  let token = req.query.tok;
+  let result = [];
+  jwt.verify(token, 'secret', function (err, decoded) {
+    req.db.collection('exam').find({ "students.email": { $eq: decoded.email } })
+      .forEach((data) => result = data);
+    if (result.length > 0)
+      res.json({ success: true });
+    else
+      res.json({ success: false });
+  });
+});
 
 //:1 error
 app.use(function (error, req, res, next) {

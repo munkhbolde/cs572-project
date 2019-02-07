@@ -16,14 +16,14 @@ export class StartExamComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit() {
-
-  }
-
-  loadData() {
     this.httpClient.get(this.url).subscribe((res: any) => {
       this.transfer.setData(res);
       console.log(res);
     });
+  }
+
+  loadData() {
+
   }
 
   startExam() {
