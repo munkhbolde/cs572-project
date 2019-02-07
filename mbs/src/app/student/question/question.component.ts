@@ -36,7 +36,6 @@ export class QuestionComponent implements OnInit {
     timeSpent: 0,
     snapshot: []
   }];
-  data = this.transfer.getData();
 
   //angular functions
   constructor(private transfer: TransferDataService,
@@ -44,10 +43,10 @@ export class QuestionComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit() {
-    if (this.data) {
-      console.log(this.data);
-    } else {
-      console.log("No data", this.data);
+    const questions = JSON.parse(localStorage.getItem("examQuestions"));
+    for (let i = 0; i < questions.length; i++) {
+      this.exam[i].question = questions[i].question;
+      console.log(`1: `, questions[i]);
     }
     if (this.q == null) {
       this.q = this.exam[0].question;

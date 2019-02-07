@@ -43,7 +43,7 @@ export class StartExamComponent implements OnInit {
     await this.studentService.fetchQuestions().subscribe((res) => {
       if (res.success) {
         console.log("45:", res.data);
-        localStorage.setItem("examQuestions", res.data);
+        localStorage.setItem("examQuestions", JSON.stringify(res.data));
       }
     });
   }

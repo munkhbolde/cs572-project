@@ -1,8 +1,13 @@
-<p>{{ number }}.{{ q }}</p>
-<ace-editor [(text)]="text" #editor [theme]="'dracula'" [mode]="'java'" [options]="options" [readOnly]="false"
-  [autoUpdateContent]="true" [durationBeforeCallback]="1000" (textChanged)="onChange($event)" style="min-height: 200px; width:100%; overflow: auto;">
-</ace-editor>
+<div class="container">
 
-<button (click)="prevQuestion()">Previous</button>
-<button (click)="nextQuestion()">Next</button>
-<button (click)="submitAnswer()">Submit</button>
+  <header class="title is-4">{{ number }}.{{ q }}</header>
+  <ace-editor [(text)]="text" #editor [theme]="'dracula'" [mode]="'java'" [options]="options" [readOnly]="false"
+    [autoUpdateContent]="true" [durationBeforeCallback]="1000" (textChanged)="onChange($event)" style="min-height: 200px; width:100%; overflow: auto;">
+  </ace-editor>
+  <hr class="hr" />
+  <div class="field">
+    <button class="button" (click)="prevQuestion()">Previous</button>
+    <button class="button" (click)="nextQuestion()">Next</button>
+    <button class="button is-info" (click)="submitAnswer()">Submit</button>
+  </div>
+</div>
