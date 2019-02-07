@@ -14,6 +14,8 @@ encapsulation: ViewEncapsulation.None,
 template: `
 <admin-nav></admin-nav>
 <div class="admin container">
+	<header class="title is-4">Create question</header>
+	<hr class="hr"/>
 	<form [formGroup]='questionForm' (ngSubmit)="onSubmit()">
 		<div class="field">
 			<textarea class="input is-info"

@@ -16,6 +16,8 @@ import {
 	<div class="admin">
 		<div class="centered-form">
 		<form class="form" [formGroup]="staffForm" (ngSubmit)="onSubmit()">
+		<header class="title is-4">Add Staff</header>
+		<hr class="hr"/>
 			<div class="field">
 				<input
 					class="input is-info"

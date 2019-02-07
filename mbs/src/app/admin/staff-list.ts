@@ -7,6 +7,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http'
 	template: `
 	<admin-nav></admin-nav>
 	<div class="admin container">
+	<header class="title is-4">Staff List</header>
+	<hr class="hr"/>
 	<table class="table is-fullwidth is-hoverable">
 		<thead>
 			<tr>

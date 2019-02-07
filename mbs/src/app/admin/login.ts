@@ -16,6 +16,7 @@ import {
 	<div class="centered-form">
     <form class="form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
 			<header>MBS</header>
+			<hr class="hr"/>
       <div class="field">
 				<input
 					class="input is-info"
