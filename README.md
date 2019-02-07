@@ -1,4 +1,12 @@
-# cs572-project
+### Admin user
+
+username: asaad
+password: saad
+
+### Admission staff
+
+username: selina
+password: selina
 
 ### Exam Object
 ```json
