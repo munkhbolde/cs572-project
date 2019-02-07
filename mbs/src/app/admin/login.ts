@@ -13,10 +13,12 @@ import {
   selector: 'app-login',
   encapsulation: ViewEncapsulation.None,
   template: `
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+	<div class="centered-form">
+    <form class="form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+			<header>MBS</header>
       <div class="field">
 				<input
-					class="input is-primary"
+					class="input is-info"
 					type="text"
 					formControlName="uname"
 					placeholder="User name"
@@ -24,16 +26,17 @@ import {
       </div>
       <div class="field">
 				<input
-					class="input is-primary"
+					class="input is-info"
 					type="password"
 					formControlName="password"
 					placeholder="Password"
 				/>
       </div>
       <div class="field">
-				<input class="button is-primary" type="submit" value="login" />
+				<input class="button is-info" type="submit" value="login" />
       </div>
     </form>
+	</div>
   `,
 })
 export class AdminLogin {

@@ -2,10 +2,12 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 
 @Component({
-	selector: 'question-list',
-	encapsulation: ViewEncapsulation.None,
-	template: `
-	<table class="table">
+selector: 'question-list',
+encapsulation: ViewEncapsulation.None,
+template: `
+<admin-nav></admin-nav>
+<div class="admin container">
+	<table class="table is-fullwidth is-hoverable">
 		<thead>
 			<tr>
 				<th>#</th>
@@ -31,34 +33,35 @@ import { HttpClient, HttpHeaders } from '@angular/common/http'
 			</tr>
 		</tbody>
 	</table>
-	`
+</div>
+`
 })
 
 export class QuestionList implements OnInit {
-	title = 'Question List'
-	url = 'http://localhost:8080/admin/questions/'
-	questions = []
+title = 'Question List'
+url = 'http://localhost:8080/admin/questions/'
+questions = []
 
-	constructor(private http: HttpClient) {}
+constructor(private http: HttpClient) {}
 
-	ngOnInit() {
-		this.loadData()
-	}
+ngOnInit() {
+this.loadData()
+}
 
-	loadData() {
-		this.http.get(this.url).subscribe((res:any) => {
-			console.log(res)
-			this.questions = res.data
-		})
+loadData() {
+this.http.get(this.url).subscribe((res:any) => {
+console.log(res)
+this.questions = res.data
+})
 	}
 
 	edit(question, status) {
-		if (!confirm('Do you really want to change status?'))
-			return
-		const data = {question: question, status: status === 'active'? 'disabled': 'active'}
+	if (!confirm('Do you really want to change status?'))
+	return
+	const data = {question: question, status: status === 'active'? 'disabled': 'active'}
 
-		this.http.post(this.url, data).subscribe((res:any) => {
-			this.loadData()
-		})
+	this.http.post(this.url, data).subscribe((res:any) => {
+	this.loadData()
+	})
 	}
-}
+	}

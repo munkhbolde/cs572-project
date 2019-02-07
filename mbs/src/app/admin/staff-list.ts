@@ -5,7 +5,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http'
 	selector: 'staff-list',
 	encapsulation: ViewEncapsulation.None,
 	template: `
-	<table class="table">
+	<admin-nav></admin-nav>
+	<div class="admin container">
+	<table class="table is-fullwidth is-hoverable">
 		<thead>
 			<tr>
 				<th>#</th>
@@ -25,8 +27,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http'
 			</tr>
 		</tfoot>
 		<tbody>
-			<tr *ngFor="let staff of staffs">
-				<th>{{ staff._id }}</th>
+			<tr *ngFor="let staff of staffs; let i = index">
+				<th>{{ i }}</th>
 				<td>{{ staff.name }}</td>
 				<td>{{ staff.type }}</td>
 				<td class="has-text-info" (click)="edit(staff)">change status</td>
@@ -34,6 +36,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http'
 			</tr>
 		</tbody>
 	</table>
+</div>
 	`
 })
 export class StaffList implements OnInit {

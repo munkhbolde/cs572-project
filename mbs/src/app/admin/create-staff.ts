@@ -12,10 +12,13 @@ import {
 	selector: 'create-staff',
 	encapsulation: ViewEncapsulation.None,
 	template: `
-		<form [formGroup]="staffForm" (ngSubmit)="onSubmit()">
+	<admin-nav></admin-nav>
+	<div class="admin">
+		<div class="centered-form">
+		<form class="form" [formGroup]="staffForm" (ngSubmit)="onSubmit()">
 			<div class="field">
 				<input
-					class="input is-primary"
+					class="input is-info"
 					type="text"
 					formControlName="name"
 					placeholder="Staff name"
@@ -23,7 +26,7 @@ import {
 			</div>
 			<div class="field">
 				<input
-					class="input is-primary"
+					class="input is-info"
 					type="password"
 					formControlName="password"
 					placeholder="password"
@@ -31,11 +34,13 @@ import {
 			</div>
 			<div class="field">
 				<input
-					class="button is-primary"
+					class="button is-info"
 					type="submit"
 					value="create"/>
 			</div>
 		</form>
+	</div>
+	</div>
 	`,
 })
 export class CreateStaff {
