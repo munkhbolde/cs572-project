@@ -13,7 +13,6 @@ export class StartExamComponent implements OnInit {
   url = 'http://localhost:8080/start'
   private _result: boolean = false;
   constructor(
-    private httpClient: HttpClient,
     private studentService: StudentService,
     private router: Router) {
   }
@@ -40,9 +39,19 @@ export class StartExamComponent implements OnInit {
     return _result;
   }
 
+  async fetchQuestions() {
+    await this.studentService.fetchQuestions().subscribe((res) => {
+      if (res.success) {
+        console.log("45:", res.data);
+        localStorage.setItem("examQuestions", res.data);
+      }
+    });
+  }
+
   startExam() {
     console.log("Exam started");
     this.checkStudentExist();
+    this.fetchQuestions();
     this.router.navigateByUrl("/exam");
   }
 

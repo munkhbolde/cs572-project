@@ -19,7 +19,7 @@ export class QuestionComponent implements OnInit {
 
   private snapshot: string[] = [];
   private code: string = "";
-  private studentEmail: string = "bilgee.py@gmail.com";
+  private studentEmail: string = localStorage.getItem("studentEmail");
   private exam = [{
     question: "What is an array",
     answer: "",
@@ -100,7 +100,6 @@ export class QuestionComponent implements OnInit {
     this.editor.setText(this.exam[objNumber].answer);
     this.snapshot = this.exam[objNumber].snapshot;
     this.number--;
-
     // //TODO: disble prev button when question 1 is showing
   }
 }
