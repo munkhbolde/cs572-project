@@ -54,7 +54,6 @@ router.get('/staffs/', check_token, async (req, res) => {
 router.patch('/staffs/', check_token, async (req, res) => {
   const name = req.body.name
   const type = req.body.type
-  console.log(req.body)
   await req.db.collection('user').updateOne(
     { name: name },
     { $set: { type: type } }
@@ -90,7 +89,6 @@ router.post('/answer', check_token, async (req, res) => {
     {$unwind: '$students'},
     {$match: {'students.email': email}},
   ]).forEach((data) => result.push(data))
-  console.log(result)
   res.json({succes: true, data: result})
 })
 
