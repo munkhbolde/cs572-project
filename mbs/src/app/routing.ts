@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router'
 import { StaffcompComponent } from './staffcomp/staffcomp.component';
 import { QuestionComponent } from './student/question/question.component'
 import { AuthGuard } from './services/auth-guard'
+import { StartExamComponent } from './student/start-exam/start-exam.component';
 
 // Used for admin
 import { AdminLogin } from './admin/login'
@@ -10,7 +11,8 @@ import { CreateStaff } from './admin/create-staff'
 import { CreateQuestion } from './admin/create-question'
 import { QuestionList } from './admin/question-list'
 import { StaffList } from './admin/staff-list'
-import { StartExamComponent } from './student/start-exam/start-exam.component';
+import { Report } from './admin/report'
+import { Answer } from './admin/answer'
 
 const routes: Routes = [
 	{ path: 'exam', component: QuestionComponent },
@@ -20,6 +22,8 @@ const routes: Routes = [
 	{ path: 'admin/create/question', component: CreateQuestion, canActivate: [AuthGuard] },
 	{ path: 'admin/questions', component: QuestionList, canActivate: [AuthGuard] },
 	{ path: 'admin/staffs', component: StaffList, canActivate: [AuthGuard] },
+	{ path: 'admin/answer', component: Answer, canActivate: [AuthGuard] },
+	{ path: 'admin/report', component: Report, canActivate: [AuthGuard] },
 	{ path: 'staff', component: StaffcompComponent, canActivate: [AuthGuard] },
 	{ path: 'start', component: StartExamComponent },
 	{ path: '**', redirectTo: 'login' },

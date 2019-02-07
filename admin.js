@@ -17,6 +17,7 @@ router.get('/questions/', check_token, async (req, res) => {
     .find().forEach((data) => result = data)
   res.json({ success: true, data: result.questions })
 })
+
 //:1 edit question status
 router.post('/questions/', check_token, async (req, res) => {
   const question = req.body.question
@@ -68,6 +69,30 @@ router.delete('/staffs/', check_token, async (req, res) => {
   res.json({ success: true })
 })
 
+//:1 report
+router.get('/report', check_token, async (req, res) => {
+  let students
+  await req.db.collection('exam').find()
+  .project({_id: 0, 'students.answer': 0})
+  .forEach(data => {
+    students = data.students
+  })
+  res.json({succes: true, data: students})
+})
+
+//:1 answer
+router.post('/answer', check_token, async (req, res) => {
+  const email = req.body.email
+  let result = []
+  await req.db.collection('exam')
+  .aggregate([
+    {$project: {_id: 0, students: 1}},
+    {$unwind: '$students'},
+    {$match: {'students.email': email}},
+  ]).forEach((data) => result.push(data))
+  console.log(result)
+  res.json({succes: true, data: result})
+})
 // endfold
 
 module.exports = router

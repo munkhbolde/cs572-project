@@ -191,7 +191,7 @@ app.get('/start', student_token, async (req, res) => {
   const pointer = await req.db.collection('exam')
     .find({
       "questions.status": "enabled"
-    }, {
+      }, {
         "_id": 0, "questions.question": 1
       }).forEach((data) => result = data)
 

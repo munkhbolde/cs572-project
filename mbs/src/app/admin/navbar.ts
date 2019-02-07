@@ -19,6 +19,7 @@ template: `
 			<a class="navbar-item" [routerLink]="['/admin/staffs']">Staffs</a>
 			<a class="navbar-item" [routerLink]="['/admin/create/question']">Add Question</a>
 			<a class="navbar-item" [routerLink]="['/admin/create/staff']">Add Staff</a>
+			<a class="navbar-item" [routerLink]="['/admin/report']">Report</a>
 		</div>
 
 		<div class="navbar-end">
