@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { TransferDataService } from '../../services/transfer-data.service';
 import { Router } from "@angular/router";
 import { Observable } from 'rxjs';
+import { StudentService } from 'src/app/services/student.service';
 @Component({
   selector: 'app-start-exam',
   templateUrl: './start-exam.component.html',
@@ -13,44 +14,35 @@ export class StartExamComponent implements OnInit {
   private _result: boolean = false;
   constructor(
     private httpClient: HttpClient,
-    private transfer: TransferDataService,
+    private studentService: StudentService,
     private router: Router) {
-    this.fetchData();
   }
 
   ngOnInit() {
-    const checkStudent = this.checkStudent();
+    const checkStudent = this.checkStudentExist();
     if (!checkStudent) {
       this.router.navigate(['/login']);
     }
 
   }
 
-  async fetchData() {
-    await this.httpClient.get(this.url).subscribe((res: any) => {
-      this.transfer.setData(res);
-      console.log(res);
-    });
-  }
-
-  async checkStudent() {
-    let url = "http://localhost:8080/checkStudent" + location.search;
-    let resp = false;
-    console.log("checkstudent working");
-    await this.httpClient.get(url).subscribe((res: any) => {
+  async checkStudentExist() {
+    let _result: boolean = false;
+    await this.studentService.checkStudent(location.search).subscribe((res) => {
       if (res.success) {
-        console.log("writing new token");
-        localStorage.setItem("studentEmail", res.email);
+        _result = true;
         localStorage.setItem("studentToken", res.token);
-        this._result = true;
-        return resp = true;
+        localStorage.setItem("studentEmail", res.email);
+      } else {
+        console.log("error on check student", res);
       }
     });
-    return resp;
+    return _result;
   }
 
   startExam() {
     console.log("Exam started");
+    this.checkStudentExist();
     this.router.navigateByUrl("/exam");
   }
 
