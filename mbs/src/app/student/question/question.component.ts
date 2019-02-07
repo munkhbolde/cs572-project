@@ -21,17 +21,17 @@ export class QuestionComponent implements OnInit {
   private code: string = "";
   private studentEmail: string = localStorage.getItem("studentEmail");
   private exam = [{
-    question: "What is an array",
+    question: "",
     answer: "",
     timeSpent: 0,
     snapshot: []
   }, {
-    question: "Create a function that delete the last element of array",
+    question: "",
     answer: "",
     timeSpent: 0,
     snapshot: []
   }, {
-    question: "What's my name",
+    question: "",
     answer: "",
     timeSpent: 0,
     snapshot: []
@@ -43,10 +43,12 @@ export class QuestionComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit() {
-    const questions = JSON.parse(localStorage.getItem("examQuestions"));
-    for (let i = 0; i < questions.length; i++) {
-      this.exam[i].question = questions[i].question;
-      console.log(`1: `, questions[i]);
+    if (this.exam[0].question == "") {
+      const questions = JSON.parse(localStorage.getItem("examQuestions"));
+      for (let i = 0; i < questions.length; i++) {
+        this.exam[i].question = questions[i].question;
+        console.log(`1: `, questions[i]);
+      }
     }
     if (this.q == null) {
       this.q = this.exam[0].question;
