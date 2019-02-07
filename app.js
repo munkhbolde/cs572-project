@@ -207,7 +207,6 @@ app.get('/start', student_token, async (req, res) => {
 //submit answers
 app.post("/submit", function (req, res) {
   const _examData = req.body.exam;
-  console.log(_examData);
   req.db.collection('exam').updateOne(
     { "students.email": req.body.email },
     { $set: { "students.$.answer": _examData, "students.$.status": "submitted" } },
