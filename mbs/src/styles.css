@@ -84,6 +84,15 @@ body {
   padding: 32px;
   background-color: #fff;
 }
+
 .admin.container textarea {
   min-height: 150px;
 }
+
+.controller {
+  display: flex;
+  justify-content: space-between;
+  width: 500px;
+  align-items: center;
+}
+

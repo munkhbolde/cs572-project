@@ -10,23 +10,35 @@ import { Router, ActivatedRoute } from '@angular/router'
 	<div class="admin container">
 		<header class="title is-4">Answer</header>
 		<hr class="hr"/>
-		<div class="answer" *ngFor="let a of answer; let i = index" >
-				<h2 class="title is-6">
-					{{ a.question}}
-				</h2>
-
-				<ace-editor [text]="a.answer" [theme]="'dracula'" [mode]="'java'" [options]="options" [readOnly]="false"
-					[autoUpdateContent]="true" [durationBeforeCallback]="1000" (textChanged)="onChange($event)" style="min-height: 200px; width:100%; overflow: auto;">
-				</ace-editor>
+		<div class="controller">
+			<span class="has-text-weight-bold"> answer: </span>
+			<span class="button is-info" (click)="changeAnswer(0)">1</span>
+			<span class="button is-info" (click)="changeAnswer(1)">2</span>
+			<span class="button is-info" (click)="changeAnswer(2)">3</span>
+			<span class="button is-warning" (click)="snapshot(shot)">snapshot</span>
+			<span class="has-text-weight-bold">grade:</span>
+			<span class="button is-success" (click)="mark('pass')">pass</span>
+			<span class="button is-danger" (click)="mark('fail')">fail</span>
 		</div>
+		<hr class="hr"/>
+			<h2 class="title is-6">
+				{{ answer[i].question}}
+			</h2>
+
+			<ace-editor [text]="current" [theme]="'dracula'" [mode]="'java'" [options]="options" [readOnly]="false"
+				[autoUpdateContent]="true" [durationBeforeCallback]="1000" style="min-height: 200px; width:100%; overflow: auto;">
+			</ace-editor>
 	</div>
 	`
 })
 export class Answer implements OnInit{
 	title = 'Report'
 	url = 'http://localhost:8080/admin/answer'
+	current: string
 	email: string
 	answer = []
+	i = 0
+	shot = false
 
 	constructor(private ar: ActivatedRoute, private http: HttpClient, private router: Router) {}
 
@@ -35,7 +47,36 @@ export class Answer implements OnInit{
 			this.email = params['email']
 			this.http.post(this.url, {email: this.email}).subscribe((res:any) => {
 				this.answer = res.data[0].students.answer
+				this.current = this.answer[0].answer
 			})
 		})
+	}
+
+	snapshot(l) {
+		let step = 1
+		this.answer[this.i].snapshot.forEach(data => {
+			setTimeout(()=>this.shot = true, 0)
+			if (this.shot == false)
+				return
+
+				setTimeout(() => {
+					this.current = data
+					console.log(this.current)
+				}, step * 1000)
+				step =  step + 1
+		})
+
+	}
+
+	changeAnswer(e) {
+		this.shot = false
+		this.i = e
+		this.current = this.answer[this.i].answer
+	}
+
+	mark(grade) {
+			this.http.patch(this.url, {email: this.email, grade: grade}).subscribe((res:any) => {
+				this.router.navigate(['/admin/report'])
+			})
 	}
 }
