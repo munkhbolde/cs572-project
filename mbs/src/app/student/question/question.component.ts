@@ -4,6 +4,8 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { edit, Editor } from 'brace';
 import { AceEditorComponent } from 'ng2-ace-editor';
 import { TransferDataService } from '../../services/transfer-data.service'
+import { StudentService } from 'src/app/services/student.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: "app-question",
@@ -17,6 +19,7 @@ export class QuestionComponent implements OnInit {
 
   private snapshot: string[] = [];
   private code: string = "";
+  private studentEmail: string = "bilgee.py@gmail.com";
   private exam = [{
     question: "What is an array",
     answer: "",
@@ -33,15 +36,16 @@ export class QuestionComponent implements OnInit {
     timeSpent: 0,
     snapshot: []
   }];
-
-  constructor(private transfer: TransferDataService) { }
   data = this.transfer.getData();
+  constructor(private transfer: TransferDataService,
+    private studentService: StudentService,
+    private router: Router) { }
 
   ngOnInit() {
     if (this.data) {
       console.log(this.data);
     } else {
-      console.log("No data");
+      console.log("No data", this.data);
     }
     if (this.q == null) {
       this.q = this.exam[0].question;
@@ -52,47 +56,74 @@ export class QuestionComponent implements OnInit {
   ngAfterViewInit() { }
 
   onChange(code: string) {
-    let ssLen = this.exam[this.number - 1].snapshot.length;
+    // let ssLen = this.exam[this.number - 1].snapshot.length;
     // if (ssLen > 0) {
     // if (this.exam[this.number - 1].snapshot[ssLen - 1] != code) {
+    this.code = code;
     this.snapshot.push(code);
-    console.log(code);
+    console.log(this.snapshot);
     // }
     // } else {
-    // this.code = code;
     // console.log(code);
 
   }
 
   submitAnswer() {
-    console.log(this.snapshot);
+    console.log(this.exam);
     if (localStorage["exam"] != null) {
       //Insert data
       console.log(localStorage["exam"]);
     } else {
       //TODO: Guard here no submission
     }
+    this.studentService.submitAnswer(this.exam, this.studentEmail).subscribe((res) => {
+      if (res.success) {
+        this.router.navigate(['/login']);
+      }
+    }, err => {
+      console.log(err);
+    });
+  }
+
+  updateObject(number, answer, snapshot) {
+    this.exam[number].answer = answer;
+    this.exam[number].snapshot = snapshot;
   }
 
   nextQuestion() {
-    //TODO: disble next button when question 3 is showing
-    this.exam[this.number - 1].answer = this.code;
-    this.exam[this.number - 1].snapshot.concat(this.snapshot);
-    this.exam[this.number - 1].timeSpent = 0;// TODO insert timer value
-    this.number += 1;
-    this.q = this.exam[this.number - 1].question;
-    this.editor.setText(this.exam[this.number - 1].answer);
-    this.snapshot = this.exam[this.number - 1].snapshot;
+    let objNumber = this.number - 1;
+    this.updateObject(objNumber, this.code, this.snapshot);
+    this.code = "";
+    objNumber += 1;
+    this.q = this.exam[objNumber].question;
+    this.editor.setText(this.exam[objNumber].answer);
+    this.snapshot = this.exam[objNumber].snapshot;
+    this.number++;
+    // //TODO: disble next button when question 3 is showing
+    // this.exam[this.number - 1].answer = this.code;
+    // this.exam[this.number - 1].snapshot.concat(this.snapshot);
+    // this.exam[this.number - 1].timeSpent = 0;// TODO insert timer value
+    // this.number += 1;
   }
 
   prevQuestion() {
-    //TODO: disble prev button when question 1 is showing
-    this.exam[this.number - 1].answer = this.code;
-    this.exam[this.number - 1].snapshot.concat(this.snapshot);
-    this.exam[this.number - 1].timeSpent = 0;// TODO insert timer value
-    this.number -= 1;
-    this.q = this.exam[this.number - 1].question;
-    this.editor.setText(this.exam[this.number - 1].answer);
-    this.snapshot = this.exam[this.number - 1].snapshot;
+    let objNumber = this.number - 1;
+    this.updateObject(objNumber, this.code, this.snapshot);
+    objNumber -= 1;
+    this.code = "";
+    this.q = this.exam[objNumber].question;
+    this.editor.setText(this.exam[objNumber].answer);
+    this.snapshot = this.exam[objNumber].snapshot;
+    this.number--;
+
+    // //TODO: disble prev button when question 1 is showing
+    // this.exam[this.number - 1].answer = this.code;
+    // this.exam[this.number - 1].snapshot.concat(this.snapshot);
+    // this.exam[this.number - 1].timeSpent = 0;// TODO insert timer value
+    // this.number -= 1;
+    // this.q = this.exam[this.number - 1].question;
+    // this.editor.setText(this.exam[this.number - 1].answer);
+    // this.snapshot = this.exam[this.number - 1].snapshot;
   }
+  //Service functions
 }

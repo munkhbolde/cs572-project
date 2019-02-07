@@ -14,7 +14,9 @@ export class StartExamComponent implements OnInit {
   constructor(
     private httpClient: HttpClient,
     private transfer: TransferDataService,
-    private router: Router) { }
+    private router: Router) {
+    this.fetchData();
+  }
 
   ngOnInit() {
     const checkStudent = this.checkStudent();
@@ -22,14 +24,13 @@ export class StartExamComponent implements OnInit {
       this.router.navigate(['/login']);
     }
 
-    this.httpClient.get(this.url).subscribe((res: any) => {
+  }
+
+  async fetchData() {
+    await this.httpClient.get(this.url).subscribe((res: any) => {
       this.transfer.setData(res);
       console.log(res);
     });
-  }
-
-  loadData() {
-
   }
 
   async checkStudent() {
@@ -49,7 +50,6 @@ export class StartExamComponent implements OnInit {
   }
 
   startExam() {
-    this.loadData();
     console.log("Exam started");
     this.router.navigateByUrl("/exam");
   }

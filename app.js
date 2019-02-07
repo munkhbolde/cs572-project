@@ -198,6 +198,20 @@ app.get('/start', student_token, async (req, res) => {
   res.json({ success: true, data: result.questions })
 })
 
+//submit answers
+app.post("/submit", function (req, res) {
+  const examData = {
+    "question": req.body.question,
+    "answer": req.body.answer,
+    "snapshot": req.body.snapshot,
+    "timeSpent": req.body.timeSpent
+  }
+
+  req.db.collection('exam').updateOne(
+    { "students.email": req.body.email },
+    { $addToSet: { answer: examData } })
+  res.json({ success: true })
+});
 
 //:1 error
 app.use(function (error, req, res, next) {
