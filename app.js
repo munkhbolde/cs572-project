@@ -101,12 +101,18 @@ app.post('/invitation', authenticatestaff, function (req, res) {
       console.log(error);
     } else {
       console.log("Message sent: ");
-      const pointer = await req.db.collection('exam').updateOne({ 'students.email': req.body.email }, { $set: { 'students.$.status': "sent" } })
+      req.db.collection('exam').findOneAndUpdate({ 'students.email': req.body.email }, { $set: { 'students.$.status': "sent" } }, function (err, result) {
+        req.db.collection('exam').findOne({ 'students.email': req.body.email }, function (err, result) {
+          console.log(result)
+          res.json({ success: true, pass: result.students })
+
+        })
+
+      })
 
       // res.json({ success: true, pass: "message sent" })
     }
   });
-  res.json({ success: true, pass: "pass" })
 });
 
 sendemailtostudent = function (email, message) {

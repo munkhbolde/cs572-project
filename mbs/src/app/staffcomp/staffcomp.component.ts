@@ -13,10 +13,17 @@ export class StaffcompComponent implements OnInit {
   studentinfo = []
   staffresponse;
   constructor(private stafservice: StaffserviceService, private router: Router) {
+    this.loaddata()
+  }
+  ngOnInit() {
+
+  }
+  loaddata() {
     this.stafservice.getstudentinfo().subscribe(
       (data) => {
         data.forEach(element => {
           this.studentinfo = element;
+          console.log(this.studentinfo)
         });
       },
       (err) => {
@@ -24,15 +31,17 @@ export class StaffcompComponent implements OnInit {
       }
     )
   }
-  ngOnInit() {
-
-  }
   sendinvitation(email, state) {
     console.log(state)
     if (state === "") {
       console.log(state)
       this.stafservice.sendinvitation(email)
-        .subscribe((d) => this.staffresponse = "invitation sent"
+        .subscribe((d) => {
+          console.log(d)
+          this.staffresponse = "invitation sent"
+          this.studentinfo = d.pass
+
+        }
           , (err) => console.log(err))
     }
     else {
@@ -50,8 +59,8 @@ export class StaffcompComponent implements OnInit {
     }
   }
 
-	logout() {
-		localStorage.clear()
-		this.router.navigate(['/login'])
-	}
+  logout() {
+    localStorage.clear()
+    this.router.navigate(['/login'])
+  }
 }
