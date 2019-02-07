@@ -22,7 +22,7 @@ import { Router, ActivatedRoute } from '@angular/router'
 		</div>
 		<hr class="hr"/>
 			<h2 class="title is-6">
-				{{ answer[i].question}}
+				{{ question }}
 			</h2>
 
 			<ace-editor [text]="current" [theme]="'dracula'" [mode]="'java'" [options]="options" [readOnly]="false"
@@ -39,6 +39,7 @@ export class Answer implements OnInit{
 	answer = []
 	i = 0
 	shot = false
+	question = ''
 
 	constructor(private ar: ActivatedRoute, private http: HttpClient, private router: Router) {}
 
@@ -48,6 +49,7 @@ export class Answer implements OnInit{
 			this.http.post(this.url, {email: this.email}).subscribe((res:any) => {
 				this.answer = res.data[0].students.answer
 				this.current = this.answer[0].answer
+				this.question = this.answer[this.i].question
 			})
 		})
 	}
@@ -55,28 +57,34 @@ export class Answer implements OnInit{
 	snapshot(l) {
 		let step = 1
 		this.answer[this.i].snapshot.forEach(data => {
-			setTimeout(()=>this.shot = true, 0)
+			this.changeShot()
+
 			if (this.shot == false)
 				return
 
-				setTimeout(() => {
-					this.current = data
-					console.log(this.current)
-				}, step * 1000)
-				step =  step + 1
+			setTimeout(() => {
+				this.current = data
+				console.log(this.current)
+			}, step * 500)
+			step =  step + 1
 		})
 
+	}
+
+	changeShot() {
+		this.shot = true
 	}
 
 	changeAnswer(e) {
 		this.shot = false
 		this.i = e
 		this.current = this.answer[this.i].answer
+		this.question = this.answer[this.i].question
 	}
 
 	mark(grade) {
-			this.http.patch(this.url, {email: this.email, grade: grade}).subscribe((res:any) => {
-				this.router.navigate(['/admin/report'])
-			})
+		this.http.patch(this.url, {email: this.email, grade: grade}).subscribe((res:any) => {
+			this.router.navigate(['/admin/report'])
+		})
 	}
 }
