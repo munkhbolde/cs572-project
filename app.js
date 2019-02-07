@@ -278,10 +278,8 @@ app.get('/checkStudent', async (req, res) => {
       { "students.email": { $eq: decoded.email } },
       { "_id": 0, "students.email": 1 })
       .forEach((data) => {
-        console.log(data);
         result = data;
       });
-    console.log(result, decoded.email);
     if (result.length > 0)
       res.json({ success: true });
     else

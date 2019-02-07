@@ -36,13 +36,10 @@ export class StartExamComponent implements OnInit {
     let url = "http://localhost:8080/checkStudent" + location.search;
     let resp = false;
     await this.httpClient.get(url).subscribe((res: any) => {
-      console.log("success:", res.success);
       if (res.success) {
-        console.log(res.success);
         return resp = true;
       }
     });
-    console.log(resp);
     return resp;
   }
 
