@@ -207,6 +207,8 @@ app.post("/submit", function (req, res) {
     "timeSpent": req.body.timeSpent
   }
 
+  console.log(req.body);
+
   req.db.collection('exam').updateOne(
     { "students.email": req.body.email },
     { $addToSet: { answer: examData } })
