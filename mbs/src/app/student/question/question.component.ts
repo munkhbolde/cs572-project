@@ -53,15 +53,15 @@ export class QuestionComponent implements OnInit {
 
   onChange(code: string) {
     let ssLen = this.exam[this.number - 1].snapshot.length;
-    if (ssLen > 0) {
-      if (this.exam[this.number - 1].snapshot[ssLen - 1] != code) {
-        this.snapshot.push(code);
-        console.log(code);
-      }
-    } else {
-      this.code = code;
-      console.log(code);
-    }
+    // if (ssLen > 0) {
+    // if (this.exam[this.number - 1].snapshot[ssLen - 1] != code) {
+    this.snapshot.push(code);
+    console.log(code);
+    // }
+    // } else {
+    // this.code = code;
+    // console.log(code);
+
   }
 
   submitAnswer() {
