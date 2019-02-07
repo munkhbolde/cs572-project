@@ -1,4 +1,5 @@
 import { Component, ViewEncapsulation } from '@angular/core'
+import { Router } from '@angular/router'
 
 @Component({
 selector: 'admin-nav',
@@ -21,7 +22,7 @@ template: `
 		</div>
 
 		<div class="navbar-end">
-			<a class="navbar-item">Logout</a>
+			<a class="navbar-item" (click)="logout()">Logout</a>
 		</div>
 	</div>
 	</div>
@@ -29,5 +30,12 @@ template: `
 	`
 })
 export class Navbar {
-title = 'navbar'
+	title = 'navbar'
+
+	constructor(private router: Router) {}
+
+	logout() {
+		localStorage.clear()
+		this.router.navigate(['/login'])
+	}
 }

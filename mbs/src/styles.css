@@ -64,6 +64,17 @@ body {
 .button {
   font-weight: bold;
 }
+
+.w5 {
+  width: 50px;
+}
+.w10 {
+  width: 100px;
+}
+
+.w15 {
+  width: 150px;
+}
 .navbar-item {
   font-size: 18px;
 }

@@ -31,10 +31,10 @@ import { HttpClient, HttpHeaders } from '@angular/common/http'
 		<tbody>
 			<tr *ngFor="let staff of staffs; let i = index">
 				<th>{{ i }}</th>
-				<td>{{ staff.name }}</td>
-				<td>{{ staff.type }}</td>
-				<td class="has-text-info" (click)="edit(staff)">change status</td>
-				<td class="has-text-danger" (click)="delete(staff.name)">delete</td>
+				<td class="has-text-weight-bold">{{ staff.name }}</td>
+				<td class="has-text-weight-bold" [ngClass]="{'staff': 'has-text-success'}[staff.type]">{{ staff.type }}</td>
+				<td class="w15" (click)="edit(staff)"><span class="button">change status</span></td>
+				<td class="w10" (click)="delete(staff.name)"><span class="button is-danger">delete</span></td>
 			</tr>
 		</tbody>
 	</table>

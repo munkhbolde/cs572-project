@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { StaffserviceService } from '../staffservice.service';
 import { promise } from 'protractor';
 import { observable, Observable } from 'rxjs';
+import { Router } from '@angular/router'
 
 @Component({
   selector: 'app-staffcomp',
@@ -11,7 +12,7 @@ import { observable, Observable } from 'rxjs';
 export class StaffcompComponent implements OnInit {
   studentinfo = []
   staffresponse;
-  constructor(private stafservice: StaffserviceService) {
+  constructor(private stafservice: StaffserviceService, private router: Router) {
     this.stafservice.getstudentinfo().subscribe(
       (data) => {
         data.forEach(element => {
@@ -49,4 +50,8 @@ export class StaffcompComponent implements OnInit {
     }
   }
 
+	logout() {
+		localStorage.clear()
+		this.router.navigate(['/login'])
+	}
 }

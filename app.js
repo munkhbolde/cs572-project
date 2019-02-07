@@ -109,17 +109,12 @@ app.get('/students', authenticatestaff, async (req, res) => {
 });
 // sending an invitation through email
 app.post('/invitation', authenticatestaff, function (req, res) {
-<<<<<<< HEAD
-  const token = req.headers.authorization.split(' ')[1]
-  console.log(req.body.email);
-=======
 
   const token = jwt.sign({
     email: req.body.email
   }, 'secret', { expiresIn: '24h' });
   res.header('Authorizatin', `Bearer ${token}`)
 
->>>>>>> 0c798fdfe2e0bfe5be8b33deb556b9b04e5d030c
   // will take email from req.email
   var smtpTransport = nodemailer.createTransport({
     service: 'gmail',
@@ -194,7 +189,7 @@ app.post('/sendemail', authenticatestaff, function (req, res) {
 });
 //:1 create question
 app.post('/admin/create/question', check_token, async (req, res) => {
-  const q = { question: req.body.question, status: 'active' }
+  const q = { question: req.body.question, status: 'enabled' }
 
   req.db.collection('exam').updateOne({}, { $addToSet: { questions: q } })
   res.json({ success: true })
@@ -267,11 +262,8 @@ app.get('/start', student_token, async (req, res) => {
     }, {
         "_id": 0, "questions.question": 1
       }).forEach((data) => result = data)
-<<<<<<< HEAD
+
   res.json({ success: true, data: result.questions })
-=======
-  res.json({ success: true, data: result.questions });
->>>>>>> 0c798fdfe2e0bfe5be8b33deb556b9b04e5d030c
 })
 
 app.get('/checkStudent', async (req, res) => {
