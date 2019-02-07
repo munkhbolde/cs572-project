@@ -15,7 +15,7 @@ export class IsdisabledDirective {
 
     }
     else {
-      this.element.nativeElement.style.visibility = "hidden";
+      this.element.nativeElement.style.disabled = "true";
     }
 
   }

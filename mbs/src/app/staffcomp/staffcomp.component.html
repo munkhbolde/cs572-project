@@ -1,4 +1,5 @@
-<h1> staff logged in</h1>
+<h1> </h1>
+<div>{{staffresponse}}</div>
 <!-- <p appInvitedir [result]="stuinfo.status">paragraph is visible or not</p> -->
 <table class="table" table is-bordered>
   <thead>
@@ -8,25 +9,22 @@
       <th> EMAIL ADDRESS</th>
       <th> EXAM</th>
       <th> STATUS</th>
-      <th> RESULT</th>
+      <th>SEND RESULT</th>
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor='let stuinfo of studentinfo;let idn=index' [ngSwitch]="stuinfo.status" class="is-selected">
+    <tr *ngFor='let stuinfo of studentinfo;let idn=index'>
       <td>{{idn+1}}</td>
       <td>{{stuinfo.name}}</td>
+
       <td>{{stuinfo.email}}</td>
-      <td *ngSwitchCase="''">
-        <button type="submit" (click)='[sendinvitation(stuinfo.email)]' [disabled]="false">Invite</button>
+      <td>
+        <button class="button is-link" type="submit" (click)='[sendinvitation(stuinfo.email,stuinfo.status)]'>Invite</button>
       </td>
-      <td *ngSwitchDefault>
-        <button type="submit" (click)='[sendinvitation(stuinfo.email)]' [disabled]="true">Invite</button>
-      </td>
+      <div *ngIf=""></div>
       <td>{{stuinfo.status}}</td>
       <td>
-        <p appIsdisabled [result]='stuinfo.status'><button type="submit" (click)='[sendemail(stuinfo.email,stuinfo.status)]'
-            [disabled]="!'stuinfo.status'">Send
-            Email
+        <p appIsdisabled [result]='stuinfo.status'><button class="button is-link" type="submit" (click)='[sendemail(stuinfo.email,stuinfo.status)]'>Send
           </button></p>
 
       </td>
@@ -39,7 +37,7 @@
       <th> EMAIL ADDRESS</th>
       <th> EXAM</th>
       <th> STATUS</th>
-      <th> RESULT</th>
+      <th>SEND RESULT</th>
     </tr>
   </tfoot>
 </table>

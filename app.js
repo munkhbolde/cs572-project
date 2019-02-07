@@ -1,4 +1,4 @@
-//:1 imports
+﻿//:1 imports
 const express = require('express')
 const parser = require('body-parser')
 const mongo = require('mongodb').MongoClient
@@ -51,6 +51,16 @@ check_token = function (req, res, next) {
   next()
 }
 
+student_token = function (req, res, next) {
+  console.log(req.headers.authorization);
+  if (!req.headers.authorization) {
+    res.status(401);
+    res.json({ status: 401, url: req.url });
+    return;
+  }
+  next();
+}
+
 //:1 login
 app.post('/login/', async (req, res) => {
   let user = undefined
@@ -99,7 +109,17 @@ app.get('/students', authenticatestaff, async (req, res) => {
 });
 // sending an invitation through email
 app.post('/invitation', authenticatestaff, function (req, res) {
+<<<<<<< HEAD
   const token = req.headers.authorization.split(' ')[1]
+  console.log(req.body.email);
+=======
+
+  const token = jwt.sign({
+    email: req.body.email
+  }, 'secret', { expiresIn: '24h' });
+  res.header('Authorizatin', `Bearer ${token}`)
+
+>>>>>>> 0c798fdfe2e0bfe5be8b33deb556b9b04e5d030c
   // will take email from req.email
   var smtpTransport = nodemailer.createTransport({
     service: 'gmail',
@@ -239,16 +259,43 @@ app.delete('/admin/staffs/', check_token, async (req, res) => {
 })
 
 //get questions for exam
-app.get('/start', async (req, res) => {
-  let result = []
+app.get('/start', student_token, async (req, res) => {
+  let result = [];
   const pointer = await req.db.collection('exam')
     .find({
       "questions.status": "enabled"
     }, {
         "_id": 0, "questions.question": 1
       }).forEach((data) => result = data)
+<<<<<<< HEAD
   res.json({ success: true, data: result.questions })
+=======
+  res.json({ success: true, data: result.questions });
+>>>>>>> 0c798fdfe2e0bfe5be8b33deb556b9b04e5d030c
 })
+
+app.get('/checkStudent', async (req, res) => {
+  let token = req.query.tok;
+  let result = [];
+  jwt.verify(token, 'secret', function (err, decoded) {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    req.db.collection('exam').find(
+      { "students.email": { $eq: decoded.email } },
+      { "_id": 0, "students.email": 1 })
+      .forEach((data) => {
+        console.log(data);
+        result = data;
+      });
+    console.log(result, decoded.email);
+    if (result.length > 0)
+      res.json({ success: true });
+    else
+      res.json({ success: false });
+  });
+});
 
 //:1 error
 app.use(function (error, req, res, next) {
