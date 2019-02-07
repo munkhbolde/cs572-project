@@ -1,4 +1,4 @@
-//:1 imports
+﻿//:1 imports
 const express = require('express')
 const parser = require('body-parser')
 const mongo = require('mongodb').MongoClient
@@ -100,6 +100,7 @@ app.get('/students', authenticatestaff, async (req, res) => {
 // sending an invitation through email
 app.post('/invitation', authenticatestaff, function (req, res) {
   const token = req.headers.authorization.split(' ')[1]
+  console.log(req.body.email);
   // will take email from req.email
   var smtpTransport = nodemailer.createTransport({
     service: 'gmail',
@@ -236,8 +237,6 @@ app.delete('/admin/staffs/', check_token, async (req, res) => {
   console.log(req.body)
   await req.db.collection('user').remove({ name: req.body.name })
   res.json({ success: true })
-<<<<<<< HEAD
-=======
 })
 
 //get questions for exam
@@ -250,7 +249,6 @@ app.get('/start', async (req, res) => {
         "_id": 0, "questions.question": 1
       }).forEach((data) => result = data)
   res.json({ success: true, data: result.questions })
->>>>>>> 99ee8f5674282e676c5fe5b67a43a971d4edfda9
 })
 
 //:1 error
