@@ -11,7 +11,8 @@ import { CreateStaff } from './admin/create-staff'
 import { CreateQuestion } from './admin/create-question'
 import { QuestionList } from './admin/question-list'
 import { StaffList } from './admin/staff-list'
-import { Result } from './admin/result';
+import { Report } from './admin/report'
+import { Answer } from './admin/answer'
 
 const routes: Routes = [
 	{ path: 'exam', component: QuestionComponent },
@@ -21,7 +22,8 @@ const routes: Routes = [
 	{ path: 'admin/create/question', component: CreateQuestion, canActivate: [AuthGuard] },
 	{ path: 'admin/questions', component: QuestionList, canActivate: [AuthGuard] },
 	{ path: 'admin/staffs', component: StaffList, canActivate: [AuthGuard] },
-	{ path: 'admin/results', component: Result, canActivate: [AuthGuard] },
+	{ path: 'admin/answer', component: Answer, canActivate: [AuthGuard] },
+	{ path: 'admin/report', component: Report, canActivate: [AuthGuard] },
 	{ path: 'staff', component: StaffcompComponent, canActivate: [AuthGuard] },
 	{ path: 'start', component: StartExamComponent },
 	{ path: '**', redirectTo: 'login' },
