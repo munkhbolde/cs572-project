@@ -64,7 +64,7 @@ export class QuestionComponent implements OnInit {
   }
 
   submitAnswer() {
-    console.log(this.exam);
+    console.log("exam:", this.exam);
     this.studentService.submitAnswer(this.exam, this.studentEmail).subscribe((res) => {
       if (res.success) {
         this.router.navigate(['/login']);
